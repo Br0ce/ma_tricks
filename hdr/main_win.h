@@ -36,7 +36,7 @@ public:
   virtual ~main_win();
 private slots:
 private:
-  Ui::MainWindow* ui;
+  Ui::MainWindow* ui_;
 };
 
 #endif // MAIN_WIN_H
