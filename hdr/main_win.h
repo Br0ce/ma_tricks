@@ -27,8 +27,11 @@
 
 #include "ui_main_view.h"
 
-#include "field.h"
 
+namespace Ui
+{
+class Main_win;
+}
 
 class Main_win : public QMainWindow
 {
