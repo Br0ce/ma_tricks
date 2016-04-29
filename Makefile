@@ -49,10 +49,14 @@ OBJECTS_DIR   = gen_bin/
 ####### Files
 
 SOURCES       = src/main.cpp \
-		src/main_win.cpp gen_bin/moc_main_win.cpp
+		src/main_win.cpp \
+		src/field.cpp gen_bin/moc_main_win.cpp \
+		gen_bin/moc_field.cpp
 OBJECTS       = gen_bin/main.o \
 		gen_bin/main_win.o \
-		gen_bin/moc_main_win.o
+		gen_bin/field.o \
+		gen_bin/moc_main_win.o \
+		gen_bin/moc_field.o
 DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
 		/usr/lib64/qt5/mkspecs/common/linux.conf \
@@ -110,8 +114,10 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib64/qt5/mkspecs/features/yacc.prf \
 		/usr/lib64/qt5/mkspecs/features/lex.prf \
-		ma_trick.pro hdr/main_win.h src/main.cpp \
-		src/main_win.cpp
+		ma_trick.pro hdr/main_win.h \
+		hdr/field.h src/main.cpp \
+		src/main_win.cpp \
+		src/field.cpp
 QMAKE_TARGET  = ma_trick
 DESTDIR       = bin/#avoid trailing-slash linebreak
 TARGET        = bin/ma_trick
@@ -280,8 +286,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents hdr/main_win.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/main_win.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents hdr/main_win.h hdr/field.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/main_win.cpp src/field.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents forms/main_view.ui $(DISTDIR)/
 
 
@@ -305,12 +311,16 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: gen_bin/moc_main_win.cpp
+compiler_moc_header_make_all: gen_bin/moc_main_win.cpp gen_bin/moc_field.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) gen_bin/moc_main_win.cpp
+	-$(DEL_FILE) gen_bin/moc_main_win.cpp gen_bin/moc_field.cpp
 gen_bin/moc_main_win.cpp: ui_main_view.h \
+		hdr/field.h \
 		hdr/main_win.h
 	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/br0ce/Projekte/ma_trick -I/home/br0ce/Projekte/ma_trick/hdr -I/usr/include/eigen3 -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8.5 -I/usr/include/c++/4.8.5/x86_64-redhat-linux -I/usr/include/c++/4.8.5/backward -I/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include -I/usr/local/include -I/usr/include hdr/main_win.h -o gen_bin/moc_main_win.cpp
+
+gen_bin/moc_field.cpp: hdr/field.h
+	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/br0ce/Projekte/ma_trick -I/home/br0ce/Projekte/ma_trick/hdr -I/usr/include/eigen3 -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8.5 -I/usr/include/c++/4.8.5/x86_64-redhat-linux -I/usr/include/c++/4.8.5/backward -I/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include -I/usr/local/include -I/usr/include hdr/field.h -o gen_bin/moc_field.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -331,15 +341,23 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 gen_bin/main.o: src/main.cpp hdr/main_win.h \
-		ui_main_view.h
+		ui_main_view.h \
+		hdr/field.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/main.o src/main.cpp
 
 gen_bin/main_win.o: src/main_win.cpp hdr/main_win.h \
-		ui_main_view.h
+		ui_main_view.h \
+		hdr/field.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/main_win.o src/main_win.cpp
+
+gen_bin/field.o: src/field.cpp hdr/field.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/field.o src/field.cpp
 
 gen_bin/moc_main_win.o: gen_bin/moc_main_win.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/moc_main_win.o gen_bin/moc_main_win.cpp
+
+gen_bin/moc_field.o: gen_bin/moc_field.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/moc_field.o gen_bin/moc_field.cpp
 
 ####### Install
 

@@ -22,7 +22,7 @@
 
 #include "main_win.h"
 
-main_win::main_win(QWidget* parent) :
+Main_win::Main_win(QWidget* parent) :
   QMainWindow(parent),
   ui_(new Ui::MainWindow)
 {
@@ -31,7 +31,7 @@ main_win::main_win(QWidget* parent) :
   connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
 }
 
-main_win::~main_win()
+Main_win::~Main_win()
 {
   delete ui_;
 }

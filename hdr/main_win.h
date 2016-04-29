@@ -27,13 +27,15 @@
 
 #include "ui_main_view.h"
 
+#include "field.h"
 
-class main_win : public QMainWindow
+
+class Main_win : public QMainWindow
 {
   Q_OBJECT
 public:
-  explicit main_win(QWidget* parent = 0);
-  virtual ~main_win();
+  explicit Main_win(QWidget* parent = 0);
+  virtual ~Main_win();
 private slots:
 private:
   Ui::MainWindow* ui_;

@@ -1,6 +1,6 @@
-/** @file main.cpp
+/** @file field.cpp
  *
- * @brief Small gui_wrapper for eigen.
+ * @brief QLineEdit to be the field in a matix
  *
  * Copyright (C) 2016  @author Niklas Beck, beck@informatik.uni-bonn.de
  *
@@ -20,15 +20,11 @@
  *
  */
 
-#include <QApplication>
-
-#include "main_win.h"
+#include "field.h"
 
 
-int main(int argc, char** argv)
+Field::Field(QWidget* parent) :
+  QLineEdit(parent)
 {
-  QApplication app(argc, argv);
-  Main_win main_win;
-  main_win.show();
-  return app.exec();
+
 }

@@ -14,9 +14,11 @@ OBJECTS_DIR=gen_bin #Intermediate object files directory
 MOC_DIR=gen_bin #Intermediate moc files directory
 
 # Input
-HEADERS += hdr/main_win.h
+HEADERS += hdr/main_win.h \
+           hdr/field.h
            
 FORMS += forms/main_view.ui
 
 SOURCES += src/main.cpp \
-           src/main_win.cpp
+           src/main_win.cpp \
+           src/field.cpp
