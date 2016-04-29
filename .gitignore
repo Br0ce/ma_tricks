@@ -68,3 +68,4 @@ build
 gen_bin
 .directory
 *.orig
+ui_main_view.h
