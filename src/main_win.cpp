@@ -27,6 +27,8 @@ main_win::main_win(QWidget* parent) :
   ui_(new Ui::MainWindow)
 {
   ui_->setupUi(this);
+
+  connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
 }
 
 main_win::~main_win()

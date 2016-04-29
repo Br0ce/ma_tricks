@@ -28,6 +28,19 @@
       <layout class="QGridLayout" name="mat_layout"/>
      </item>
      <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <widget class="QLineEdit" name="display"/>
      </item>
      <item>
@@ -35,95 +48,95 @@
        <item>
         <layout class="QGridLayout" name="gridLayout">
          <item row="1" column="0">
-          <widget class="QPushButton" name="pushButton_5">
+          <widget class="QPushButton" name="pb_set_A">
            <property name="text">
-            <string>PushButton</string>
+            <string>set A</string>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QPushButton" name="pushButton_8">
+          <widget class="QPushButton" name="pb_lu">
            <property name="text">
-            <string>PushButton</string>
+            <string>LU</string>
            </property>
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QPushButton" name="pushButton_9">
+          <widget class="QPushButton" name="pb_vander">
            <property name="text">
-            <string>PushButton</string>
+            <string>Vander</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QPushButton" name="pushButton_6">
+          <widget class="QPushButton" name="pb_times">
            <property name="text">
-            <string>PushButton</string>
+            <string>x</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QPushButton" name="pushButton_7">
+          <widget class="QPushButton" name="pb_minus">
            <property name="text">
-            <string>PushButton</string>
+            <string>-</string>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QPushButton" name="pushButton_4">
+          <widget class="QPushButton" name="pb_set_B">
            <property name="text">
-            <string>PushButton</string>
+            <string>set B</string>
            </property>
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="pb_set_dim">
            <property name="text">
-            <string>PushButton</string>
+            <string>set dim</string>
            </property>
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="pb_set_b">
            <property name="text">
-            <string>PushButton</string>
+            <string>set b</string>
            </property>
           </widget>
          </item>
          <item row="0" column="2">
-          <widget class="QPushButton" name="pushButton_10">
+          <widget class="QPushButton" name="pb_plus">
            <property name="text">
-            <string>PushButton</string>
+            <string>+</string>
            </property>
           </widget>
          </item>
          <item row="1" column="2">
-          <widget class="QPushButton" name="pushButton_11">
+          <widget class="QPushButton" name="pb_inv">
            <property name="text">
-            <string>PushButton</string>
+            <string>inv</string>
            </property>
           </widget>
          </item>
          <item row="2" column="2">
-          <widget class="QPushButton" name="pushButton_12">
+          <widget class="QPushButton" name="pb_qr">
            <property name="text">
-            <string>PushButton</string>
+            <string>QR</string>
            </property>
           </widget>
          </item>
          <item row="3" column="2">
-          <widget class="QPushButton" name="pushButton_13">
+          <widget class="QPushButton" name="pb_solve">
            <property name="text">
-            <string>PushButton</string>
+            <string>Ax=b</string>
            </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="pb_enter">
          <property name="text">
-          <string>PushButton</string>
+          <string>enter</string>
          </property>
         </widget>
        </item>
@@ -141,8 +154,23 @@
      <height>29</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuDatei">
+    <property name="title">
+     <string>Datei</string>
+    </property>
+    <addaction name="action_beenden"/>
+   </widget>
+   <addaction name="menuDatei"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_beenden">
+   <property name="text">
+    <string>beenden</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
