@@ -41,7 +41,11 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLineEdit" name="display"/>
+      <widget class="QLineEdit" name="display">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
