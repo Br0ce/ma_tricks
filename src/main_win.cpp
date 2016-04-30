@@ -26,12 +26,17 @@ Main_win::Main_win(QWidget* parent) :
   QMainWindow(parent),
   ui_(new Ui::MainWindow)
 {
-  ui_->setupUi(this);
-
-  connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
+  init_gui();
 }
 
 Main_win::~Main_win()
 {
   delete ui_;
+}
+
+void Main_win::init_gui()
+{
+  ui_->setupUi(this);
+
+  connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
 }

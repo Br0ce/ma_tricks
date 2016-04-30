@@ -41,6 +41,7 @@ public:
   virtual ~Main_win();
 private slots:
 private:
+  void init_gui();
   Ui::MainWindow* ui_;
 };
 
