@@ -28,19 +28,6 @@
       <layout class="QGridLayout" name="mat_layout"/>
      </item>
      <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
       <widget class="QLineEdit" name="display">
        <property name="readOnly">
         <bool>true</bool>
