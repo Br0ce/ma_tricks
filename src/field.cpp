@@ -26,5 +26,5 @@
 Field::Field(QWidget* parent) :
   QLineEdit(parent)
 {
-
+  this->setValidator(new QDoubleValidator);
 }

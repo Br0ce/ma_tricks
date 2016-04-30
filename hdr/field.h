@@ -24,6 +24,7 @@
 #define FIELD_H
 
 #include <QLineEdit>
+#include <QDoubleValidator>
 
 class Field : public QLineEdit
 {
