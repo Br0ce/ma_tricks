@@ -69,4 +69,5 @@ gen_bin
 .directory
 *.orig
 ui_main_view.h
+ui_set_dim.h
 *.kate-swp
