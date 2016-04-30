@@ -42,6 +42,7 @@ void Main_win::init_gui()
   ui_->setupUi(this);
 
   connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
+  build_matrix(matrix_dim_.first, matrix_dim_.first);
 }
 
 void Main_win::read_settings()
@@ -53,6 +54,9 @@ void Main_win::read_settings()
   C_dim_.second = settings_.value("matrix_C/dim_col", 5).toInt();
 
   b_dim_ = settings_.value("vector_b/dim", 5).toInt();
+
+  matrix_dim_.first = settings_.value("activ_mat/dim_row", 5).toInt();
+  matrix_dim_.second = settings_.value("activ_mat/dim_col", 5).toInt();
 }
 
 void Main_win::save_settings()
@@ -68,10 +72,21 @@ void Main_win::save_settings()
   settings_.endGroup();
 
   settings_.setValue("vector_b/dim", b_dim_);
+
+  settings_.beginGroup("activ_mat");
+  settings_.setValue("dim_row", matrix_dim_.first);
+  settings_.setValue("dim_col", matrix_dim_.second);
 }
 
 void Main_win::closeEvent(QCloseEvent* event)
 {
   save_settings();
   QWidget::closeEvent(event);
+}
+
+void Main_win::build_matrix(int row, int col)
+{
+  for(int i = 0; i < row; ++i)
+    for(int j = 0; j < col; ++j)
+      ui_->mat_layout->addWidget(new Field(), j, i);
 }

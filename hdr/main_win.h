@@ -27,6 +27,8 @@
 #include <QSettings>
 #include <QDebug>
 
+#include "field.h"
+
 #include "ui_main_view.h"
 
 
@@ -48,12 +50,14 @@ private:
   void init_gui();
   void read_settings();
   void save_settings();
+  void build_matrix(int row, int col);
 
   QSettings settings_;
   Ui::MainWindow* ui_;
 
   std::pair<int, int> A_dim_;
   std::pair<int, int> C_dim_;
+  std::pair<int, int> matrix_dim_;
   int b_dim_;
 };
 
