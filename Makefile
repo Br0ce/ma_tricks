@@ -50,13 +50,17 @@ OBJECTS_DIR   = gen_bin/
 
 SOURCES       = src/main.cpp \
 		src/main_win.cpp \
-		src/field.cpp gen_bin/moc_main_win.cpp \
-		gen_bin/moc_field.cpp
+		src/field.cpp \
+		src/set_dim.cpp gen_bin/moc_main_win.cpp \
+		gen_bin/moc_field.cpp \
+		gen_bin/moc_set_dim.cpp
 OBJECTS       = gen_bin/main.o \
 		gen_bin/main_win.o \
 		gen_bin/field.o \
+		gen_bin/set_dim.o \
 		gen_bin/moc_main_win.o \
-		gen_bin/moc_field.o
+		gen_bin/moc_field.o \
+		gen_bin/moc_set_dim.o
 DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
 		/usr/lib64/qt5/mkspecs/common/linux.conf \
@@ -115,9 +119,11 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/features/yacc.prf \
 		/usr/lib64/qt5/mkspecs/features/lex.prf \
 		ma_trick.pro hdr/main_win.h \
-		hdr/field.h src/main.cpp \
+		hdr/field.h \
+		hdr/set_dim.h src/main.cpp \
 		src/main_win.cpp \
-		src/field.cpp
+		src/field.cpp \
+		src/set_dim.cpp
 QMAKE_TARGET  = ma_trick
 DESTDIR       = bin/#avoid trailing-slash linebreak
 TARGET        = bin/ma_trick
@@ -145,7 +151,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): ui_main_view.h $(OBJECTS)  
+$(TARGET): ui_main_view.h ui_set_dim.h $(OBJECTS)  
 	@test -d bin/ || mkdir -p bin/
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
@@ -286,9 +292,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents hdr/main_win.h hdr/field.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/main_win.cpp src/field.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents forms/main_view.ui $(DISTDIR)/
+	$(COPY_FILE) --parents hdr/main_win.h hdr/field.h hdr/set_dim.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/main_win.cpp src/field.cpp src/set_dim.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents forms/main_view.ui forms/set_dim.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -311,24 +317,32 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: gen_bin/moc_main_win.cpp gen_bin/moc_field.cpp
+compiler_moc_header_make_all: gen_bin/moc_main_win.cpp gen_bin/moc_field.cpp gen_bin/moc_set_dim.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) gen_bin/moc_main_win.cpp gen_bin/moc_field.cpp
-gen_bin/moc_main_win.cpp: ui_main_view.h \
-		hdr/field.h \
+	-$(DEL_FILE) gen_bin/moc_main_win.cpp gen_bin/moc_field.cpp gen_bin/moc_set_dim.cpp
+gen_bin/moc_main_win.cpp: hdr/field.h \
+		ui_main_view.h \
+		ui_set_dim.h \
 		hdr/main_win.h
 	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/br0ce/Projekte/ma_trick -I/home/br0ce/Projekte/ma_trick/hdr -I/usr/include/eigen3 -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8.5 -I/usr/include/c++/4.8.5/x86_64-redhat-linux -I/usr/include/c++/4.8.5/backward -I/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include -I/usr/local/include -I/usr/include hdr/main_win.h -o gen_bin/moc_main_win.cpp
 
 gen_bin/moc_field.cpp: hdr/field.h
 	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/br0ce/Projekte/ma_trick -I/home/br0ce/Projekte/ma_trick/hdr -I/usr/include/eigen3 -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8.5 -I/usr/include/c++/4.8.5/x86_64-redhat-linux -I/usr/include/c++/4.8.5/backward -I/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include -I/usr/local/include -I/usr/include hdr/field.h -o gen_bin/moc_field.cpp
 
+gen_bin/moc_set_dim.cpp: ui_set_dim.h \
+		hdr/set_dim.h
+	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/br0ce/Projekte/ma_trick -I/home/br0ce/Projekte/ma_trick/hdr -I/usr/include/eigen3 -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8.5 -I/usr/include/c++/4.8.5/x86_64-redhat-linux -I/usr/include/c++/4.8.5/backward -I/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include -I/usr/local/include -I/usr/include hdr/set_dim.h -o gen_bin/moc_set_dim.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_main_view.h
+compiler_uic_make_all: ui_main_view.h ui_set_dim.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_main_view.h
+	-$(DEL_FILE) ui_main_view.h ui_set_dim.h
 ui_main_view.h: forms/main_view.ui
 	/usr/lib64/qt5/bin/uic forms/main_view.ui -o ui_main_view.h
+
+ui_set_dim.h: forms/set_dim.ui
+	/usr/lib64/qt5/bin/uic forms/set_dim.ui -o ui_set_dim.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -341,23 +355,32 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 gen_bin/main.o: src/main.cpp hdr/main_win.h \
+		hdr/field.h \
 		ui_main_view.h \
-		hdr/field.h
+		ui_set_dim.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/main.o src/main.cpp
 
 gen_bin/main_win.o: src/main_win.cpp hdr/main_win.h \
+		hdr/field.h \
 		ui_main_view.h \
-		hdr/field.h
+		ui_set_dim.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/main_win.o src/main_win.cpp
 
 gen_bin/field.o: src/field.cpp hdr/field.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/field.o src/field.cpp
+
+gen_bin/set_dim.o: src/set_dim.cpp hdr/set_dim.h \
+		ui_set_dim.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/set_dim.o src/set_dim.cpp
 
 gen_bin/moc_main_win.o: gen_bin/moc_main_win.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/moc_main_win.o gen_bin/moc_main_win.cpp
 
 gen_bin/moc_field.o: gen_bin/moc_field.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/moc_field.o gen_bin/moc_field.cpp
+
+gen_bin/moc_set_dim.o: gen_bin/moc_set_dim.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/moc_set_dim.o gen_bin/moc_set_dim.cpp
 
 ####### Install
 
