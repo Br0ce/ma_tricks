@@ -43,17 +43,17 @@ class Main_win : public QMainWindow
 public:
   explicit Main_win(QWidget* parent = 0);
   virtual ~Main_win();
-protected:
-  void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
-private slots:
-private:
+
   void init_gui();
   void read_settings();
   void save_settings();
   void build_matrix(int row, int col);
-
-  QSettings settings_;
+protected:
+  void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
+private slots:
+private:
   Ui::MainWindow* ui_;
+  QSettings settings_;
 
   std::pair<int, int> A_dim_;
   std::pair<int, int> C_dim_;
