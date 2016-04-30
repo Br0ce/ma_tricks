@@ -24,6 +24,7 @@
 #define MAIN_WIN_H
 
 #include <QMainWindow>
+#include <QSettings>
 
 #include "ui_main_view.h"
 
@@ -42,6 +43,8 @@ public:
 private slots:
 private:
   void init_gui();
+
+  QSettings settings_;
   Ui::MainWindow* ui_;
 };
 

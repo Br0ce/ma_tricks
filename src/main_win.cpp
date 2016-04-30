@@ -24,8 +24,10 @@
 
 Main_win::Main_win(QWidget* parent) :
   QMainWindow(parent),
-  ui_(new Ui::MainWindow)
+  ui_(new Ui::MainWindow),
+  settings_("ma_trick_user", "ma_trick") // stored in ~/.config/ma_trick_user/ma_trick.conf
 {
+  settings_.setFallbacksEnabled(false);
   init_gui();
 }
 
