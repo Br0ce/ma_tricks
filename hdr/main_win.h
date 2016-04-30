@@ -27,7 +27,10 @@
 #include <QSettings>
 #include <QDebug>
 
+#include <exception>
+
 #include "field.h"
+#include "set_dim.h"
 
 #include "ui_main_view.h"
 
@@ -47,17 +50,20 @@ public:
   void init_gui();
   void read_settings();
   void save_settings();
-  void build_matrix(int row, int col);
+  void build_matrix(std::pair<int, int> dim);
+  void remove_matrix();
 protected:
   void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 private slots:
+  void set_dim();
 private:
   Ui::MainWindow* ui_;
   QSettings settings_;
 
   std::pair<int, int> A_dim_;
   std::pair<int, int> C_dim_;
-  std::pair<int, int> matrix_dim_;
+  std::pair<int, int> mat_dim_;
+  std::pair<int, int> mat_dim_tmp_;
   int b_dim_;
 };
 

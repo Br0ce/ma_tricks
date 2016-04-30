@@ -44,7 +44,9 @@ void Main_win::init_gui()
   ui_->display->setAlignment(Qt::AlignRight);
 
   connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
-  build_matrix(matrix_dim_.first, matrix_dim_.first);
+  connect(ui_->pb_set_dim, SIGNAL(clicked(bool)), this, SLOT(set_dim()));
+
+  build_matrix(mat_dim_);
 }
 
 void Main_win::read_settings()
@@ -57,8 +59,11 @@ void Main_win::read_settings()
 
   b_dim_ = settings_.value("vector_b/dim", 5).toInt();
 
-  matrix_dim_.first = settings_.value("activ_mat/dim_row", 5).toInt();
-  matrix_dim_.second = settings_.value("activ_mat/dim_col", 5).toInt();
+  mat_dim_.first = settings_.value("activ_mat/dim_row", 5).toInt();
+  mat_dim_tmp_.first = mat_dim_.first;
+
+  mat_dim_.second = settings_.value("activ_mat/dim_col", 5).toInt();
+  mat_dim_tmp_.second = mat_dim_.second;
 }
 
 void Main_win::save_settings()
@@ -76,8 +81,8 @@ void Main_win::save_settings()
   settings_.setValue("vector_b/dim", b_dim_);
 
   settings_.beginGroup("activ_mat");
-  settings_.setValue("dim_row", matrix_dim_.first);
-  settings_.setValue("dim_col", matrix_dim_.second);
+  settings_.setValue("dim_row", mat_dim_.first);
+  settings_.setValue("dim_col", mat_dim_.second);
 }
 
 void Main_win::closeEvent(QCloseEvent* event)
@@ -86,9 +91,30 @@ void Main_win::closeEvent(QCloseEvent* event)
   QWidget::closeEvent(event);
 }
 
-void Main_win::build_matrix(int row, int col)
+void Main_win::build_matrix(std::pair<int, int> dim)
 {
-  for(int i = 0; i < row; ++i)
-    for(int j = 0; j < col; ++j)
-      ui_->mat_layout->addWidget(new Field(), j, i);
+  for(int i = 0; i < dim.first; ++i)
+    for(int j = 0; j < dim.second; ++j)
+      ui_->mat_layout->addWidget(new Field(), i, j);
+}
+
+void Main_win::remove_matrix()
+{
+  for(int i = 0; i < mat_dim_.first; ++i)
+    for(int j = 0; j < mat_dim_.second; ++j)
+    {
+      auto item = ui_->mat_layout->itemAtPosition(i, j);
+      delete item->widget();
+    }
+}
+
+void Main_win::set_dim()
+{
+  Set_dim dialog_set_dim(this, mat_dim_tmp_);
+  dialog_set_dim.setModal(true);
+  dialog_set_dim.exec();
+
+  remove_matrix();
+  build_matrix(mat_dim_tmp_);
+  mat_dim_ = mat_dim_tmp_;
 }
