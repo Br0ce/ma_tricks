@@ -27,4 +27,5 @@ Field::Field(QWidget* parent) :
   QLineEdit(parent)
 {
   this->setValidator(new QDoubleValidator);
+  this->setAlignment(Qt::AlignRight);
 }
