@@ -40,6 +40,8 @@ Main_win::~Main_win()
 void Main_win::init_gui()
 {
   ui_->setupUi(this);
+  ui_->display->setReadOnly(true);
+  ui_->display->setAlignment(Qt::AlignRight);
 
   connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
   build_matrix(matrix_dim_.first, matrix_dim_.first);
