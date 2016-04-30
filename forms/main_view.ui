@@ -30,7 +30,7 @@
      <item>
       <widget class="QLineEdit" name="display">
        <property name="readOnly">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
