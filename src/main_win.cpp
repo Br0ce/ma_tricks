@@ -28,6 +28,7 @@ Main_win::Main_win(QWidget* parent) :
   settings_("ma_trick_user", "ma_trick") // stored in ~/.config/ma_trick_user/ma_trick.conf
 {
   settings_.setFallbacksEnabled(false);
+  read_settings();
   init_gui();
 }
 
@@ -41,4 +42,36 @@ void Main_win::init_gui()
   ui_->setupUi(this);
 
   connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
+}
+
+void Main_win::read_settings()
+{
+  A_dim_.first = settings_.value("matrix_A/dim_row", 5).toInt();
+  A_dim_.second = settings_.value("matrix_A/dim_col", 5).toInt();
+
+  C_dim_.first = settings_.value("matrix_C/dim_row", 5).toInt();
+  C_dim_.second = settings_.value("matrix_C/dim_col", 5).toInt();
+
+  b_dim_ = settings_.value("vector_b/dim", 5).toInt();
+}
+
+void Main_win::save_settings()
+{
+  settings_.beginGroup("matirx_A");
+  settings_.setValue("dim_row", A_dim_.first);
+  settings_.setValue("dim_col", A_dim_.second);
+  settings_.endGroup();
+
+  settings_.beginGroup("matrix_C");
+  settings_.setValue("dim_row", C_dim_.first);
+  settings_.setValue("dim_col", C_dim_.second);
+  settings_.endGroup();
+
+  settings_.setValue("vector_b/dim", b_dim_);
+}
+
+void Main_win::closeEvent(QCloseEvent* event)
+{
+  save_settings();
+  QWidget::closeEvent(event);
 }

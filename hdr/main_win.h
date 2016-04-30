@@ -25,6 +25,7 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include <QDebug>
 
 #include "ui_main_view.h"
 
@@ -40,12 +41,20 @@ class Main_win : public QMainWindow
 public:
   explicit Main_win(QWidget* parent = 0);
   virtual ~Main_win();
+protected:
+  void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 private slots:
 private:
   void init_gui();
+  void read_settings();
+  void save_settings();
 
   QSettings settings_;
   Ui::MainWindow* ui_;
+
+  std::pair<int, int> A_dim_;
+  std::pair<int, int> C_dim_;
+  int b_dim_;
 };
 
 #endif // MAIN_WIN_H
