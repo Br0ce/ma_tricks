@@ -26,3 +26,14 @@ Math_mod::Math_mod()
 {
 
 }
+
+void Math_mod::fill_A(std::vector< double > v, std::pair<int, int> d)
+{
+  A.resize(d.first, d.second);
+  int k = 0;
+  for(int i = 0; i < d.first; ++i)
+    for(int j = 0; j < d.second; ++j)
+      A(i, j) = v.at(k++);
+
+  std::cout << A << std::endl;
+}

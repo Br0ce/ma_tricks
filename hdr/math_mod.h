@@ -23,17 +23,18 @@
 #ifndef MATH_MOD_H
 #define MATH_MOD_H
 
-#include "Eigen/"
+#include "Eigen/Dense"
+
+#include <iostream>
 
 class Math_mod
 {
+public:
   explicit Math_mod();
-  fill_A(std::vector<double> v);
-  fill_C(std::vector<double> v);
-  fill_b(std::vector<double> v);
+  void fill_A(std::vector<double> v, std::pair<int, int> d);
+  void fill_b(std::vector<double> v, std::pair<int, int> d);
 private:
   Eigen::MatrixXd A;
-  Eigen::MatrixXd C;
   Eigen::VectorXd b;
 };
 
