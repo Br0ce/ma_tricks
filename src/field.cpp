@@ -28,4 +28,5 @@ Field::Field(QWidget* parent) :
 {
   this->setValidator(new QDoubleValidator);
   this->setAlignment(Qt::AlignRight);
+  this->setText("0");
 }
