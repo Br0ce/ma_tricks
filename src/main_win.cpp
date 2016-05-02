@@ -46,6 +46,7 @@ void Main_win::init_gui()
   connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
   connect(ui_->pb_set_dim, SIGNAL(clicked(bool)), this, SLOT(set_dim()));
   connect(ui_->pb_set_A, SIGNAL(clicked(bool)), this, SLOT(set_A()));
+  connect(ui_->pb_times, SIGNAL(clicked(bool)), this, SLOT(times()));
 
   build_matrix(mat_dim_);
 }
@@ -129,8 +130,9 @@ std::vector< double > Main_win::read_matrix()
   for(int i = 0; i < mat_dim_.first; ++i)
     for(int j = 0; j < mat_dim_.second; ++j)
     {
-      auto item = dynamic_cast<Field*>(ui_->mat_layout->itemAtPosition(i, j)->widget());
-      tmp.push_back(item->get_text());
+      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
+      if(item)
+        tmp.push_back(item->get_text());
     }
 
   return tmp;
