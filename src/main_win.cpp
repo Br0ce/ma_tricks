@@ -102,10 +102,7 @@ void Main_win::remove_matrix()
 {
   for(int i = 0; i < mat_dim_.first; ++i)
     for(int j = 0; j < mat_dim_.second; ++j)
-    {
-      auto item = ui_->mat_layout->itemAtPosition(i, j);
-      delete item->widget();
-    }
+      delete ui_->mat_layout->itemAtPosition(i, j)->widget();
 }
 
 void Main_win::set_dim()
