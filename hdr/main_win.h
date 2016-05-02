@@ -28,6 +28,7 @@
 #include <QDebug>
 
 #include <exception>
+#include <vector>
 
 #include "field.h"
 #include "set_dim.h"
@@ -53,10 +54,12 @@ public:
   void save_settings();
   void build_matrix(std::pair<int, int> dim);
   void remove_matrix();
+  std::vector<double> read_matrix();
 protected:
   void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 private slots:
   void set_dim();
+  void set_A();
 private:
   Ui::MainWindow* ui_;
   QSettings settings_;
