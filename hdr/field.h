@@ -31,7 +31,7 @@ class Field : public QLineEdit
   Q_OBJECT
 public:
   explicit Field(QWidget* parent = 0);
-
+  double get_text();
 private:
 };
 

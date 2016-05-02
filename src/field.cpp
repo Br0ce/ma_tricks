@@ -30,3 +30,8 @@ Field::Field(QWidget* parent) :
   this->setAlignment(Qt::AlignRight);
   this->setText("0");
 }
+
+double Field::get_text()
+{
+  return this->text().toDouble();
+}
