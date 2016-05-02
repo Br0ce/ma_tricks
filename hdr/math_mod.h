@@ -34,8 +34,8 @@ public:
   void fill_A(std::vector<double> v, std::pair<int, int> d);
   void fill_b(std::vector<double> v, std::pair<int, int> d);
 private:
-  Eigen::MatrixXd A;
-  Eigen::VectorXd b;
+  Eigen::MatrixXd A_;
+  Eigen::VectorXd b_;
 };
 
 #endif // MATH_MOD_H
