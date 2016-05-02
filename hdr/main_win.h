@@ -60,6 +60,7 @@ protected:
 private slots:
   void set_dim();
   void set_A();
+  void times();
 private:
   Ui::MainWindow* ui_;
   QSettings settings_;
@@ -71,6 +72,7 @@ private:
   int b_dim_;
 
   Math_mod math;
+  bool pending_op;
 };
 
 #endif // MAIN_WIN_H
