@@ -31,6 +31,7 @@
 
 #include "field.h"
 #include "set_dim.h"
+#include "math_mod.h"
 
 #include "ui_main_view.h"
 
@@ -65,6 +66,8 @@ private:
   std::pair<int, int> mat_dim_;
   std::pair<int, int> mat_dim_tmp_;
   int b_dim_;
+
+  Math_mod math;
 };
 
 #endif // MAIN_WIN_H
