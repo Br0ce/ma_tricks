@@ -35,3 +35,8 @@ double Field::get_text()
 {
   return this->text().toDouble();
 }
+
+void Field::set_text(double d)
+{
+  this->setText(QString::number(d));
+}
