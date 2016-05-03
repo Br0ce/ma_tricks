@@ -327,7 +327,6 @@ compiler_moc_header_clean:
 gen_bin/moc_main_win.cpp: hdr/field.h \
 		hdr/set_dim.h \
 		ui_set_dim.h \
-		hdr/math_mod.h \
 		ui_main_view.h \
 		hdr/main_win.h
 	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/br0ce/Projekte/ma_trick -I/home/br0ce/Projekte/ma_trick/hdr -I/usr/include/eigen3 -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8.5 -I/usr/include/c++/4.8.5/x86_64-redhat-linux -I/usr/include/c++/4.8.5/backward -I/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include -I/usr/local/include -I/usr/include hdr/main_win.h -o gen_bin/moc_main_win.cpp
@@ -364,7 +363,6 @@ gen_bin/main.o: src/main.cpp hdr/main_win.h \
 		hdr/field.h \
 		hdr/set_dim.h \
 		ui_set_dim.h \
-		hdr/math_mod.h \
 		ui_main_view.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/main.o src/main.cpp
 
@@ -372,7 +370,6 @@ gen_bin/main_win.o: src/main_win.cpp hdr/main_win.h \
 		hdr/field.h \
 		hdr/set_dim.h \
 		ui_set_dim.h \
-		hdr/math_mod.h \
 		ui_main_view.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/main_win.o src/main_win.cpp
 

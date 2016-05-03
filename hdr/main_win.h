@@ -29,6 +29,7 @@
 
 #include <exception>
 #include <vector>
+#include <iostream>
 
 #include <Eigen/Dense>
 
@@ -43,7 +44,6 @@ namespace Ui
 class Main_win;
 }
 
-enum class Op { ADD, SUB, MUL, NONE };
 
 class Main_win : public QMainWindow
 {
@@ -82,6 +82,7 @@ public:
   void minus_pending();
   void minus();
   void diff_matrix();
+  void inv_matrix();
 protected:
   void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 private slots:
@@ -91,6 +92,7 @@ private slots:
   void mul_clicked();
   void equal_clicked();
   void clear_clicked();
+  void inv_clicked();
 private:
   Ui::MainWindow* ui_;
   QSettings settings_;
@@ -105,7 +107,6 @@ private:
   bool pending_add_;
   bool pending_minus_;
   bool pending_mul_;
-  Op pending_op_;
   std::pair<QString, char> dis_char_;
 };
 

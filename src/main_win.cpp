@@ -57,6 +57,7 @@ void Main_win::init_gui()
   connect(ui_->pb_minus, SIGNAL(clicked(bool)), this, SLOT(minus_clicked()));
   connect(ui_->pb_mul, SIGNAL(clicked(bool)), this, SLOT(mul_clicked()));
   connect(ui_->pb_clear, SIGNAL(clicked(bool)), this, SLOT(clear_clicked()));
+  connect(ui_->pb_inv, SIGNAL(clicked(bool)), this, SLOT(inv_clicked()));
 
   build_matrix(mat_dim_);
 }
@@ -280,6 +281,17 @@ bool Main_win::mul_pending()
   }
 }
 
+void Main_win::inv_matrix()
+{
+  matrix m(mat_dim_.first, mat_dim_.second);
+  read_matrix(m);
+  matrix n = m.inverse();
+
+  remove_matrix();
+  build_matrix(mat_dim_);
+  display_matrix(n);
+}
+
 /***********************slots****************************/
 
 
@@ -362,4 +374,9 @@ void Main_win::clear_clicked()
   remove_matrix();
   build_matrix(mat_dim_);
   reset_display();
+}
+
+void Main_win::inv_clicked()
+{
+  inv_matrix();
 }
