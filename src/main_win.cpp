@@ -174,18 +174,18 @@ void Main_win::set_dim_clicked()
 
 void Main_win::add_clicked()
 {
-  if(!pending_add_)
+  if(pending_add_)
+  {
+    sum_matrix();
+    remove_matrix();
+    build_matrix(mat_dim_);
+  }
+  else
   {
     read_matrix();
     remove_matrix();
     build_matrix(mat_dim_);
     pending_add_ = true;
-  }
-  else
-  {
-    sum_matrix();
-    remove_matrix();
-    build_matrix(mat_dim_);
   }
   to_display(next_dis_char() + "+");
 }
