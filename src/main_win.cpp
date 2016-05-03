@@ -27,6 +27,7 @@ Main_win::Main_win(QWidget* parent) :
   ui_(new Ui::MainWindow),
   settings_("ma_trick_user", "ma_trick"), // stored in ~/.config/ma_trick_user/ma_trick.conf
   pending_add_(false),
+  pending_mul_(false),
   dis_char_("ABCDEFGHIJKLMN", 0)
 {
   settings_.setFallbacksEnabled(false);
@@ -51,6 +52,7 @@ void Main_win::init_gui()
   connect(ui_->pb_set_dim, SIGNAL(clicked(bool)), this, SLOT(set_dim_clicked()));
   connect(ui_->pb_enter, SIGNAL(clicked(bool)), this, SLOT(equal_clicked()));
   connect(ui_->pb_plus, SIGNAL(clicked(bool)), this, SLOT(add_clicked()));
+  connect(ui_->pb_times, SIGNAL(clicked(bool)), this, SLOT(mul_clicked()));
 
   build_matrix(mat_dim_);
 }
@@ -77,8 +79,6 @@ void Main_win::closeEvent(QCloseEvent* event)
   QWidget::closeEvent(event);
 }
 
-
-
 /*****************gui-matrix-operations*****************/
 
 
@@ -86,6 +86,13 @@ void Main_win::build_matrix(dim d)
 {
   for(int i = 0; i < d.first; ++i)
     for(int j = 0; j < d.second; ++j)
+      ui_->mat_layout->addWidget(new Field(), i, j);
+}
+
+void Main_win::build_matrix(int rows, int cols)
+{
+  for(int i = 0; i < rows; ++i)
+    for(int j = 0; j < cols; ++j)
       ui_->mat_layout->addWidget(new Field(), i, j);
 }
 
@@ -109,9 +116,9 @@ void Main_win::display_matrix(matrix& m)
   }
 }
 
-void Main_win::read_matrix()
+void Main_win::read_matrix(matrix& m)
 {
-  pending_sum_.resize(mat_dim_.first, mat_dim_.second);
+  m.resize(mat_dim_.first, mat_dim_.second);
 
   for(int i = 0; i < mat_dim_.first; ++i)
   {
@@ -119,7 +126,7 @@ void Main_win::read_matrix()
     {
       auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
       if(item)
-        pending_sum_(i, j) = item->get_text();
+        m(i, j) = item->get_text();
     }
   }
 }
@@ -145,7 +152,6 @@ void Main_win::reset_display()
 
 /********************math-operations**********************/
 
-
 void Main_win::sum_matrix()
 {
   for(int i = 0; i < mat_dim_.first; ++i)
@@ -157,6 +163,19 @@ void Main_win::sum_matrix()
         pending_sum_(i, j) = pending_sum_(i, j) + item->get_text();
     }
   }
+}
+
+void Main_win::mul_matrix()
+{
+  matrix m(mat_dim_.first, mat_dim_.second);
+  read_matrix(m);
+  pending_factors_ *= m;
+}
+
+bool Main_win::dim_mismatch()
+{
+  return ((pending_factors_.rows() != mat_dim_.first) || (pending_factors_.rows() != mat_dim_.second));
+
 }
 
 /***********************slots****************************/
@@ -182,12 +201,42 @@ void Main_win::add_clicked()
   }
   else
   {
-    read_matrix();
+    read_matrix(pending_sum_);
     remove_matrix();
     build_matrix(mat_dim_);
     pending_add_ = true;
   }
   to_display(next_dis_char() + "+");
+}
+
+void Main_win::mul_clicked()
+{
+  if(pending_mul_)
+  {
+    if(!dim_mismatch())
+    {
+      mul_matrix();
+      remove_matrix();
+      build_matrix(mat_dim_);
+      to_display(next_dis_char() + "*");
+    }
+    else
+    {
+      remove_matrix();
+      build_matrix(pending_factors_.rows(), pending_factors_.cols());
+      display_matrix(pending_factors_);
+      ui_->display->clear();
+      to_display("matrix dimensions to not match: reset to last matrix");
+    }
+  }
+  else
+  {
+    read_matrix(pending_factors_);
+    remove_matrix();
+    build_matrix(mat_dim_);
+    pending_mul_ = true;
+    to_display(next_dis_char() + "*");
+  }
 }
 
 void Main_win::equal_clicked()

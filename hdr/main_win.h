@@ -59,18 +59,22 @@ public:
   void read_settings();
   void save_settings();
   void build_matrix(dim d);
+  void build_matrix(int rows, int cols);
   void display_matrix(matrix& m);
   void remove_matrix();
-  void read_matrix();
+  void read_matrix(matrix& m);
   void sum_matrix();
+  void mul_matrix();
   QString next_dis_char();
   void reset_display();
   void to_display(QString s);
+  bool dim_mismatch();
 protected:
   void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 private slots:
   void set_dim_clicked();
   void add_clicked();
+  void mul_clicked();
   void equal_clicked();
 private:
   Ui::MainWindow* ui_;
@@ -83,6 +87,7 @@ private:
   dim mat_dim_tmp_;
 
   bool pending_add_;
+  bool pending_mul_;
   std::pair<QString, char> dis_char_;
 };
 
