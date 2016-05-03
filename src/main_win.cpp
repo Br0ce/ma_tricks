@@ -42,6 +42,7 @@ Main_win::~Main_win()
 
 /*************************gui administration*********************/
 
+
 void Main_win::init_gui()
 {
   ui_->setupUi(this);
@@ -133,6 +134,7 @@ void Main_win::read_matrix(matrix& m)
 
 /********************gui-display-operations***************/
 
+
 void Main_win::to_display(QString s)
 {
   QString tmp = ui_->display->text();
@@ -151,6 +153,7 @@ void Main_win::reset_display()
 }
 
 /********************math-operations**********************/
+
 
 void Main_win::sum_matrix()
 {
@@ -175,10 +178,86 @@ void Main_win::mul_matrix()
 bool Main_win::dim_mismatch()
 {
   return ((pending_factors_.rows() != mat_dim_.first) || (pending_factors_.rows() != mat_dim_.second));
+}
 
+void Main_win::add_control()
+{
+  if(pending_add_)
+  {
+    add_pending();
+  }
+  else
+  {
+    add();
+    pending_add_ = true;
+  }
+
+  to_display(next_dis_char() + "+");
+}
+
+void Main_win::add()
+{
+  read_matrix(pending_sum_);
+  remove_matrix();
+  build_matrix(mat_dim_);
+}
+
+void Main_win::add_pending()
+{
+  sum_matrix();
+  remove_matrix();
+  build_matrix(mat_dim_);
+}
+
+void Main_win::mul_control()
+{
+  if(pending_mul_)
+  {
+    if(mul_pending())
+    {
+      to_display(next_dis_char() + "*");
+    }
+    else
+    {
+      reset_display();
+      to_display("matrix dimensions to not match: reset to last matrix");
+    }
+  }
+  else
+  {
+    mul();
+    pending_mul_ = true;
+    to_display(next_dis_char() + "*");
+  }
+}
+
+void Main_win::mul()
+{
+  read_matrix(pending_factors_);
+  remove_matrix();
+  build_matrix(mat_dim_);
+}
+
+bool Main_win::mul_pending()
+{
+  if(!dim_mismatch())
+  {
+    mul_matrix();
+    remove_matrix();
+    build_matrix(mat_dim_);
+    return true;
+  }
+  else
+  {
+    remove_matrix();
+    build_matrix(pending_factors_.rows(), pending_factors_.cols());
+    display_matrix(pending_factors_);
+    return false;
+  }
 }
 
 /***********************slots****************************/
+
 
 void Main_win::set_dim_clicked()
 {
@@ -193,62 +272,40 @@ void Main_win::set_dim_clicked()
 
 void Main_win::add_clicked()
 {
+  if(pending_mul_)
+    mul_control();
+
+  add_control();
+}
+
+void Main_win::mul_clicked()
+{
+  mul_control();
+}
+
+void Main_win::equal_clicked()
+{
+  if(pending_mul_)
+  {
+    mul_matrix();
+    remove_matrix();
+    build_matrix(pending_factors_.rows(), pending_factors_.cols());
+
+    display_matrix(pending_factors_);
+
+    pending_mul_ = false;
+  }
+
   if(pending_add_)
   {
     sum_matrix();
     remove_matrix();
     build_matrix(mat_dim_);
-  }
-  else
-  {
-    read_matrix(pending_sum_);
-    remove_matrix();
-    build_matrix(mat_dim_);
-    pending_add_ = true;
-  }
-  to_display(next_dis_char() + "+");
-}
 
-void Main_win::mul_clicked()
-{
-  if(pending_mul_)
-  {
-    if(!dim_mismatch())
-    {
-      mul_matrix();
-      remove_matrix();
-      build_matrix(mat_dim_);
-      to_display(next_dis_char() + "*");
-    }
-    else
-    {
-      remove_matrix();
-      build_matrix(pending_factors_.rows(), pending_factors_.cols());
-      display_matrix(pending_factors_);
-      ui_->display->clear();
-      to_display("matrix dimensions to not match: reset to last matrix");
-    }
+    display_matrix(pending_sum_);
+
+    pending_add_ = false;
   }
-  else
-  {
-    read_matrix(pending_factors_);
-    remove_matrix();
-    build_matrix(mat_dim_);
-    pending_mul_ = true;
-    to_display(next_dis_char() + "*");
-  }
-}
-
-void Main_win::equal_clicked()
-{
-  sum_matrix();
-  remove_matrix();
-  build_matrix(mat_dim_);
-
-  display_matrix(pending_sum_);
-
-  pending_add_ = false;
   to_display(next_dis_char() + "=");
   to_display(next_dis_char());
-
 }

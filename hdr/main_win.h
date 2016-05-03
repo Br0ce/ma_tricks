@@ -43,7 +43,7 @@ namespace Ui
 class Main_win;
 }
 
-enum class State { ADD, SUB, MUL };
+enum class Op { ADD, SUB, MUL, NONE };
 
 class Main_win : public QMainWindow
 {
@@ -58,17 +58,26 @@ public:
   void init_gui();
   void read_settings();
   void save_settings();
+
   void build_matrix(dim d);
   void build_matrix(int rows, int cols);
-  void display_matrix(matrix& m);
   void remove_matrix();
+  void display_matrix(matrix& m);
   void read_matrix(matrix& m);
-  void sum_matrix();
-  void mul_matrix();
+
+  void to_display(QString s);
   QString next_dis_char();
   void reset_display();
-  void to_display(QString s);
+
+  void sum_matrix();
+  void mul_matrix();
   bool dim_mismatch();
+  void add_control();
+  void add();
+  void add_pending();
+  void mul_control();
+  void mul();
+  bool mul_pending();
 protected:
   void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 private slots:
@@ -88,6 +97,7 @@ private:
 
   bool pending_add_;
   bool pending_mul_;
+  Op pending_op_;
   std::pair<QString, char> dis_char_;
 };
 
