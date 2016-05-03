@@ -78,11 +78,16 @@ public:
   void mul_control();
   void mul();
   bool mul_pending();
+  void minus_control();
+  void minus_pending();
+  void minus();
+  void diff_matrix();
 protected:
   void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 private slots:
   void set_dim_clicked();
   void add_clicked();
+  void minus_clicked();
   void mul_clicked();
   void equal_clicked();
   void clear_clicked();
@@ -91,12 +96,14 @@ private:
   QSettings settings_;
 
   matrix pending_sum_;
+  matrix pending_diff_;
   matrix pending_factors_;
 
   dim mat_dim_;
   dim mat_dim_tmp_;
 
   bool pending_add_;
+  bool pending_minus_;
   bool pending_mul_;
   Op pending_op_;
   std::pair<QString, char> dis_char_;

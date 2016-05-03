@@ -27,6 +27,7 @@ Main_win::Main_win(QWidget* parent) :
   ui_(new Ui::MainWindow),
   settings_("ma_trick_user", "ma_trick"), // stored in ~/.config/ma_trick_user/ma_trick.conf
   pending_add_(false),
+  pending_minus_(false),
   pending_mul_(false),
   dis_char_("ABCDEFGHIJKLMN", 0)
 {
@@ -53,6 +54,7 @@ void Main_win::init_gui()
   connect(ui_->pb_set_dim, SIGNAL(clicked(bool)), this, SLOT(set_dim_clicked()));
   connect(ui_->pb_equal, SIGNAL(clicked(bool)), this, SLOT(equal_clicked()));
   connect(ui_->pb_plus, SIGNAL(clicked(bool)), this, SLOT(add_clicked()));
+  connect(ui_->pb_minus, SIGNAL(clicked(bool)), this, SLOT(minus_clicked()));
   connect(ui_->pb_mul, SIGNAL(clicked(bool)), this, SLOT(mul_clicked()));
   connect(ui_->pb_clear, SIGNAL(clicked(bool)), this, SLOT(clear_clicked()));
 
@@ -161,16 +163,13 @@ void Main_win::sum_matrix()
   matrix m(mat_dim_.first, mat_dim_.second);
   read_matrix(m);
   pending_sum_ += m;
-  /*
-  for(int i = 0; i < mat_dim_.first; ++i)
-  {
-    for(int j = 0; j < mat_dim_.second; ++j)
-    {
-      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
-      if(item)
-        pending_sum_(i, j) = pending_sum_(i, j) + item->get_text();
-    }
-  }*/
+}
+
+void Main_win::diff_matrix()
+{
+  matrix m(mat_dim_.first, mat_dim_.second);
+  read_matrix(m);
+  pending_diff_ -= m;
 }
 
 void Main_win::mul_matrix()
@@ -208,6 +207,33 @@ void Main_win::add()
 void Main_win::add_pending()
 {
   sum_matrix();
+  remove_matrix();
+  build_matrix(mat_dim_);
+}
+
+void Main_win::minus_control()
+{
+  if(pending_minus_)
+  {
+    minus_pending();
+  }
+  else
+  {
+    minus();
+    pending_minus_ = true;
+  }
+}
+
+void Main_win::minus()
+{
+  read_matrix(pending_diff_);
+  remove_matrix();
+  build_matrix(mat_dim_);
+}
+
+void Main_win::minus_pending()
+{
+  diff_matrix();
   remove_matrix();
   build_matrix(mat_dim_);
 }
@@ -277,6 +303,16 @@ void Main_win::add_clicked()
   to_display(next_dis_char() + " + ");
 }
 
+void Main_win::minus_clicked()
+{
+  if(pending_mul_)
+    mul_control();
+
+  minus_control();
+  to_display(next_dis_char() + " - ");
+}
+
+
 void Main_win::mul_clicked()
 {
   to_display(next_dis_char() + " * ");
@@ -305,6 +341,17 @@ void Main_win::equal_clicked()
     display_matrix(pending_sum_);
 
     pending_add_ = false;
+  }
+
+  if(pending_minus_)
+  {
+    diff_matrix();
+    remove_matrix();
+    build_matrix(mat_dim_);
+
+    display_matrix(pending_diff_);
+
+    pending_minus_ = false;
   }
   to_display(next_dis_char() + " = ");
   to_display(next_dis_char());
