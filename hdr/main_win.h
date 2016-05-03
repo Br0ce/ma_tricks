@@ -85,6 +85,7 @@ private slots:
   void add_clicked();
   void mul_clicked();
   void equal_clicked();
+  void clear_clicked();
 private:
   Ui::MainWindow* ui_;
   QSettings settings_;

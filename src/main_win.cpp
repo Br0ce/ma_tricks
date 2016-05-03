@@ -51,9 +51,10 @@ void Main_win::init_gui()
 
   connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
   connect(ui_->pb_set_dim, SIGNAL(clicked(bool)), this, SLOT(set_dim_clicked()));
-  connect(ui_->pb_enter, SIGNAL(clicked(bool)), this, SLOT(equal_clicked()));
+  connect(ui_->pb_equal, SIGNAL(clicked(bool)), this, SLOT(equal_clicked()));
   connect(ui_->pb_plus, SIGNAL(clicked(bool)), this, SLOT(add_clicked()));
-  connect(ui_->pb_times, SIGNAL(clicked(bool)), this, SLOT(mul_clicked()));
+  connect(ui_->pb_mul, SIGNAL(clicked(bool)), this, SLOT(mul_clicked()));
+  connect(ui_->pb_clear, SIGNAL(clicked(bool)), this, SLOT(clear_clicked()));
 
   build_matrix(mat_dim_);
 }
@@ -157,6 +158,10 @@ void Main_win::reset_display()
 
 void Main_win::sum_matrix()
 {
+  matrix m(mat_dim_.first, mat_dim_.second);
+  read_matrix(m);
+  pending_sum_ += m;
+  /*
   for(int i = 0; i < mat_dim_.first; ++i)
   {
     for(int j = 0; j < mat_dim_.second; ++j)
@@ -165,7 +170,7 @@ void Main_win::sum_matrix()
       if(item)
         pending_sum_(i, j) = pending_sum_(i, j) + item->get_text();
     }
-  }
+  }*/
 }
 
 void Main_win::mul_matrix()
@@ -191,8 +196,6 @@ void Main_win::add_control()
     add();
     pending_add_ = true;
   }
-
-  to_display(next_dis_char() + "+");
 }
 
 void Main_win::add()
@@ -213,11 +216,7 @@ void Main_win::mul_control()
 {
   if(pending_mul_)
   {
-    if(mul_pending())
-    {
-      to_display(next_dis_char() + "*");
-    }
-    else
+    if(!mul_pending())
     {
       reset_display();
       to_display("matrix dimensions to not match: reset to last matrix");
@@ -227,7 +226,6 @@ void Main_win::mul_control()
   {
     mul();
     pending_mul_ = true;
-    to_display(next_dis_char() + "*");
   }
 }
 
@@ -276,10 +274,12 @@ void Main_win::add_clicked()
     mul_control();
 
   add_control();
+  to_display(next_dis_char() + " + ");
 }
 
 void Main_win::mul_clicked()
 {
+  to_display(next_dis_char() + " * ");
   mul_control();
 }
 
@@ -306,6 +306,13 @@ void Main_win::equal_clicked()
 
     pending_add_ = false;
   }
-  to_display(next_dis_char() + "=");
+  to_display(next_dis_char() + " = ");
   to_display(next_dis_char());
+}
+
+void Main_win::clear_clicked()
+{
+  remove_matrix();
+  build_matrix(mat_dim_);
+  reset_display();
 }
