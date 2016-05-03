@@ -30,9 +30,10 @@
 #include <exception>
 #include <vector>
 
+#include <Eigen/Dense>
+
 #include "field.h"
 #include "set_dim.h"
-#include "math_mod.h"
 
 #include "ui_main_view.h"
 
@@ -42,37 +43,47 @@ namespace Ui
 class Main_win;
 }
 
+enum class State { ADD, SUB, MUL };
+
 class Main_win : public QMainWindow
 {
   Q_OBJECT
 public:
+  using dim = std::pair<int, int>;
+  using matrix = Eigen::MatrixXd;
+
   explicit Main_win(QWidget* parent = 0);
   virtual ~Main_win();
 
   void init_gui();
   void read_settings();
   void save_settings();
-  void build_matrix(std::pair<int, int> dim);
+  void build_matrix(dim d);
+  void display_matrix(matrix& m);
   void remove_matrix();
-  std::vector<double> read_matrix();
+  void read_matrix();
+  void sum_matrix();
+  QString next_dis_char();
+  void reset_display();
+  void to_display(QString s);
 protected:
   void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 private slots:
-  void set_dim();
-  void set_A();
-  void times();
+  void set_dim_clicked();
+  void add_clicked();
+  void equal_clicked();
 private:
   Ui::MainWindow* ui_;
   QSettings settings_;
 
-  std::pair<int, int> A_dim_;
-  std::pair<int, int> C_dim_;
-  std::pair<int, int> mat_dim_;
-  std::pair<int, int> mat_dim_tmp_;
-  int b_dim_;
+  matrix pending_sum_;
+  matrix pending_factors_;
 
-  Math_mod math;
-  bool pending_op;
+  dim mat_dim_;
+  dim mat_dim_tmp_;
+
+  bool pending_add_;
+  std::pair<QString, char> dis_char_;
 };
 
 #endif // MAIN_WIN_H

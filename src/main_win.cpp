@@ -26,7 +26,8 @@ Main_win::Main_win(QWidget* parent) :
   QMainWindow(parent),
   ui_(new Ui::MainWindow),
   settings_("ma_trick_user", "ma_trick"), // stored in ~/.config/ma_trick_user/ma_trick.conf
-  pending_op(false)
+  pending_add_(false),
+  dis_char_("ABCDEFGHIJKLMN", 0)
 {
   settings_.setFallbacksEnabled(false);
   read_settings();
@@ -38,6 +39,8 @@ Main_win::~Main_win()
   delete ui_;
 }
 
+/*************************gui administration*********************/
+
 void Main_win::init_gui()
 {
   ui_->setupUi(this);
@@ -45,23 +48,15 @@ void Main_win::init_gui()
   ui_->display->setAlignment(Qt::AlignRight);
 
   connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
-  connect(ui_->pb_set_dim, SIGNAL(clicked(bool)), this, SLOT(set_dim()));
-  connect(ui_->pb_set_A, SIGNAL(clicked(bool)), this, SLOT(set_A()));
-  connect(ui_->pb_times, SIGNAL(clicked(bool)), this, SLOT(times()));
+  connect(ui_->pb_set_dim, SIGNAL(clicked(bool)), this, SLOT(set_dim_clicked()));
+  connect(ui_->pb_enter, SIGNAL(clicked(bool)), this, SLOT(equal_clicked()));
+  connect(ui_->pb_plus, SIGNAL(clicked(bool)), this, SLOT(add_clicked()));
 
   build_matrix(mat_dim_);
 }
 
 void Main_win::read_settings()
 {
-  A_dim_.first = settings_.value("matrix_A/dim_row", 5).toInt();
-  A_dim_.second = settings_.value("matrix_A/dim_col", 5).toInt();
-
-  C_dim_.first = settings_.value("matrix_C/dim_row", 5).toInt();
-  C_dim_.second = settings_.value("matrix_C/dim_col", 5).toInt();
-
-  b_dim_ = settings_.value("vector_b/dim", 5).toInt();
-
   mat_dim_.first = settings_.value("activ_mat/dim_row", 5).toInt();
   mat_dim_tmp_.first = mat_dim_.first;
 
@@ -71,18 +66,6 @@ void Main_win::read_settings()
 
 void Main_win::save_settings()
 {
-  settings_.beginGroup("matirx_A");
-  settings_.setValue("dim_row", A_dim_.first);
-  settings_.setValue("dim_col", A_dim_.second);
-  settings_.endGroup();
-
-  settings_.beginGroup("matrix_C");
-  settings_.setValue("dim_row", C_dim_.first);
-  settings_.setValue("dim_col", C_dim_.second);
-  settings_.endGroup();
-
-  settings_.setValue("vector_b/dim", b_dim_);
-
   settings_.beginGroup("activ_mat");
   settings_.setValue("dim_row", mat_dim_.first);
   settings_.setValue("dim_col", mat_dim_.second);
@@ -94,10 +77,24 @@ void Main_win::closeEvent(QCloseEvent* event)
   QWidget::closeEvent(event);
 }
 
-void Main_win::build_matrix(std::pair<int, int> dim)
+QString Main_win::next_dis_char()
 {
-  for(int i = 0; i < dim.first; ++i)
-    for(int j = 0; j < dim.second; ++j)
+  return dis_char_.first.at(dis_char_.second++);
+}
+
+void Main_win::reset_display()
+{
+  dis_char_.second = 0;
+  ui_->display->clear();
+}
+
+/*****************gui-matrix-operations*****************/
+
+
+void Main_win::build_matrix(dim d)
+{
+  for(int i = 0; i < d.first; ++i)
+    for(int j = 0; j < d.second; ++j)
       ui_->mat_layout->addWidget(new Field(), i, j);
 }
 
@@ -108,7 +105,61 @@ void Main_win::remove_matrix()
       delete ui_->mat_layout->itemAtPosition(i, j)->widget();
 }
 
-void Main_win::set_dim()
+void Main_win::display_matrix(matrix& m)
+{
+  for(int i = 0; i < m.rows(); ++i)
+  {
+    for(int j = 0; j < m.cols(); ++j)
+    {
+      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
+      if(item)
+        item->set_text(m(i, j));
+    }
+  }
+}
+
+/********************gui-display-operations***************/
+
+void Main_win::to_display(QString s)
+{
+  QString tmp = ui_->display->text();
+  ui_->display->setText(tmp + s);
+}
+
+
+/********************math-operations**********************/
+
+void Main_win::read_matrix()
+{
+  pending_sum_.resize(mat_dim_.first, mat_dim_.second);
+
+  for(int i = 0; i < mat_dim_.first; ++i)
+  {
+    for(int j = 0; j < mat_dim_.second; ++j)
+    {
+      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
+      if(item)
+        pending_sum_(i, j) = item->get_text();
+    }
+  }
+}
+
+void Main_win::sum_matrix()
+{
+  for(int i = 0; i < mat_dim_.first; ++i)
+  {
+    for(int j = 0; j < mat_dim_.second; ++j)
+    {
+      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
+      if(item)
+        pending_sum_(i, j) = pending_sum_(i, j) + item->get_text();
+    }
+  }
+}
+
+/***********************slots****************************/
+
+void Main_win::set_dim_clicked()
 {
   Set_dim dialog_set_dim(this, mat_dim_tmp_);
   dialog_set_dim.setModal(true);
@@ -119,22 +170,34 @@ void Main_win::set_dim()
   mat_dim_ = mat_dim_tmp_;
 }
 
-void Main_win::set_A()
+void Main_win::add_clicked()
 {
-  math.fill_A(read_matrix(), mat_dim_);
+  if(!pending_add_)
+  {
+    read_matrix();
+    remove_matrix();
+    build_matrix(mat_dim_);
+    pending_add_ = true;
+  }
+  else
+  {
+    sum_matrix();
+    remove_matrix();
+    build_matrix(mat_dim_);
+  }
+  to_display(next_dis_char() + "+");
 }
 
-std::vector< double > Main_win::read_matrix()
+void Main_win::equal_clicked()
 {
-  std::vector<double> tmp;
+  sum_matrix();
+  remove_matrix();
+  build_matrix(mat_dim_);
 
-  for(int i = 0; i < mat_dim_.first; ++i)
-    for(int j = 0; j < mat_dim_.second; ++j)
-    {
-      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
-      if(item)
-        tmp.push_back(item->get_text());
-    }
+  display_matrix(pending_sum_);
 
-  return tmp;
+  pending_add_ = false;
+  to_display(next_dis_char() + "=");
+  to_display(next_dis_char());
+
 }
