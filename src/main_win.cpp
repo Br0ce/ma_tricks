@@ -77,16 +77,7 @@ void Main_win::closeEvent(QCloseEvent* event)
   QWidget::closeEvent(event);
 }
 
-QString Main_win::next_dis_char()
-{
-  return dis_char_.first.at(dis_char_.second++);
-}
 
-void Main_win::reset_display()
-{
-  dis_char_.second = 0;
-  ui_->display->clear();
-}
 
 /*****************gui-matrix-operations*****************/
 
@@ -118,17 +109,6 @@ void Main_win::display_matrix(matrix& m)
   }
 }
 
-/********************gui-display-operations***************/
-
-void Main_win::to_display(QString s)
-{
-  QString tmp = ui_->display->text();
-  ui_->display->setText(tmp + s);
-}
-
-
-/********************math-operations**********************/
-
 void Main_win::read_matrix()
 {
   pending_sum_.resize(mat_dim_.first, mat_dim_.second);
@@ -143,6 +123,28 @@ void Main_win::read_matrix()
     }
   }
 }
+
+/********************gui-display-operations***************/
+
+void Main_win::to_display(QString s)
+{
+  QString tmp = ui_->display->text();
+  ui_->display->setText(tmp + s);
+}
+
+QString Main_win::next_dis_char()
+{
+  return dis_char_.first.at(dis_char_.second++);
+}
+
+void Main_win::reset_display()
+{
+  dis_char_.second = 0;
+  ui_->display->clear();
+}
+
+/********************math-operations**********************/
+
 
 void Main_win::sum_matrix()
 {
