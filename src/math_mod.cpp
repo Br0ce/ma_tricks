@@ -22,18 +22,45 @@
 
 #include "math_mod.h"
 
-Math_mod::Math_mod()
-{
+Math_mod::Math_mod() :
+  pending_add_(false),
+  pending_mul_(false)
+{ }
 
-}
-
-void Math_mod::fill_A(std::vector< double > v, std::pair<int, int> d)
+Eigen::MatrixXd Math_mod::fill_tmp(std::vector< double > v, std::pair<int, int> d)
 {
   A_.resize(d.first, d.second);
   int k = 0;
   for(int i = 0; i < d.first; ++i)
     for(int j = 0; j < d.second; ++j)
-      A(i, j) = v.at(k++);
+      A_(i, j) = v.at(k++);
 
-  std::cout << A_ << std::endl;
+  return A_;
+}
+
+std::vector<double> Math_mod::add(std::vector< double > v, std::pair<int, int> d)
+{
+  if(!pending_mul_)
+  {
+    if(!pending_add_)
+    {
+      pending_sum_ = fill_tmp(v, d);
+    }
+    else
+    {
+      pending_sum_ += fill_tmp(v, d);
+    }
+  }
+  return make_vector(pending_sum_);
+}
+
+std::vector< double > Math_mod::make_vector(Eigen::MatrixXd& m)
+{
+  std::vector<double> tmp;
+
+  for(int i = 0; i < m.rows(); ++i)
+    for(int j = 0; j < m.cols(); ++j)
+      tmp.push_back(m(i, j));
+
+  return tmp;
 }

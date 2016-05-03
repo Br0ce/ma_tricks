@@ -26,16 +26,24 @@
 #include "Eigen/Dense"
 
 #include <iostream>
+#include <vector>
 
 class Math_mod
 {
 public:
   explicit Math_mod();
-  void fill_A(std::vector<double> v, std::pair<int, int> d);
+  Eigen::MatrixXd fill_tmp(std::vector<double> v, std::pair<int, int> d);
+  std::vector<double> add(std::vector<double> v, std::pair<int, int> d);
+  std::vector<double> make_vector(Eigen::MatrixXd& m);
   void fill_b(std::vector<double> v, std::pair<int, int> d);
 private:
   Eigen::MatrixXd A_;
+  Eigen::MatrixXd pending_sum_;
+  Eigen::MatrixXd pending_factors_;
   Eigen::VectorXd b_;
+
+  bool pending_add_;
+  bool pending_mul_;
 };
 
 #endif // MATH_MOD_H
