@@ -27,7 +27,6 @@
 #include <QSettings>
 #include <QDebug>
 
-#include <exception>
 #include <vector>
 #include <iostream>
 
