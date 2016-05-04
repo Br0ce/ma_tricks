@@ -58,6 +58,8 @@ void Main_win::init_gui()
   connect(ui_->pb_mul, SIGNAL(clicked(bool)), this, SLOT(mul_clicked()));
   connect(ui_->pb_clear, SIGNAL(clicked(bool)), this, SLOT(clear_clicked()));
   connect(ui_->pb_inv, SIGNAL(clicked(bool)), this, SLOT(inv_clicked()));
+  connect(ui_->pb_set_A, SIGNAL(clicked(bool)), this, SLOT(set_A_clicked()));
+  connect(ui_->pb_set_b, SIGNAL(clicked(bool)), this, SLOT(set_b_clicked()));
 
   build_matrix(mat_dim_);
 }
@@ -133,6 +135,18 @@ void Main_win::read_matrix(matrix& m)
       if(item)
         m(i, j) = item->get_text();
     }
+  }
+}
+
+void Main_win::read_matrix(Main_win::vector& v)
+{
+  v.resize(mat_dim_.first);
+
+  for(int i = 0; i < mat_dim_.first; ++i)
+  {
+    auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, 0)->widget());
+    if(item)
+      v(i) = item->get_text();
   }
 }
 
@@ -379,4 +393,18 @@ void Main_win::clear_clicked()
 void Main_win::inv_clicked()
 {
   inv_matrix();
+}
+
+void Main_win::set_A_clicked()
+{
+  A_.resize(mat_dim_.first, mat_dim_.second);
+  read_matrix(A_);
+}
+
+void Main_win::set_b_clicked()
+{
+  if(mat_dim_.second == 1)
+    read_matrix(b_);
+  else
+    to_display("b is vector: set col-dim to 1");
 }

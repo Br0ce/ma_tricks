@@ -51,6 +51,7 @@ class Main_win : public QMainWindow
 public:
   using dim = std::pair<int, int>;
   using matrix = Eigen::MatrixXd;
+  using vector = Eigen::VectorXd;
 
   explicit Main_win(QWidget* parent = 0);
   virtual ~Main_win();
@@ -64,6 +65,7 @@ public:
   void remove_matrix();
   void display_matrix(matrix& m);
   void read_matrix(matrix& m);
+  void read_matrix(vector& v);
 
   void to_display(QString s);
   QString next_dis_char();
@@ -93,6 +95,8 @@ private slots:
   void equal_clicked();
   void clear_clicked();
   void inv_clicked();
+  void set_A_clicked();
+  void set_b_clicked();
 private:
   Ui::MainWindow* ui_;
   QSettings settings_;
@@ -100,6 +104,8 @@ private:
   matrix pending_sum_;
   matrix pending_diff_;
   matrix pending_factors_;
+  matrix A_;
+  vector b_;
 
   dim mat_dim_;
   dim mat_dim_tmp_;
