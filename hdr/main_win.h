@@ -25,9 +25,15 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include <QFileDialog>
+#include <QFile>
+#include <QString>
+
 #include <QDebug>
 
 #include <vector>
+#include <fstream>
+#include <istream>
 #include <iostream>
 
 #include <Eigen/Dense>
@@ -63,6 +69,7 @@ public:
   void build_matrix(int rows, int cols);
   void remove_matrix();
   void display_matrix(matrix& m);
+  void display_matrix(int rows, int cols, std::vector<double> v);
   void read_matrix(matrix& m);
   void read_matrix(vector& v);
 
@@ -96,6 +103,8 @@ private slots:
   void inv_clicked();
   void set_A_clicked();
   void set_b_clicked();
+  void save_clicked();
+  void load_clicked();
 private:
   Ui::MainWindow* ui_;
   QSettings settings_;

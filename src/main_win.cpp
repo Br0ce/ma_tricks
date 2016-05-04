@@ -50,6 +50,8 @@ void Main_win::init_gui()
   ui_->display->setReadOnly(true);
   ui_->display->setAlignment(Qt::AlignRight);
 
+  connect(ui_->action_save, SIGNAL(triggered(bool)), this, SLOT(save_clicked()));
+  connect(ui_->action_load, SIGNAL(triggered(bool)), this, SLOT(load_clicked()));
   connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
   connect(ui_->pb_set_dim, SIGNAL(clicked(bool)), this, SLOT(set_dim_clicked()));
   connect(ui_->pb_equal, SIGNAL(clicked(bool)), this, SLOT(equal_clicked()));
@@ -119,6 +121,20 @@ void Main_win::display_matrix(matrix& m)
       auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
       if(item)
         item->set_text(m(i, j));
+    }
+  }
+}
+
+void Main_win::display_matrix(int rows, int cols, std::vector< double > v)
+{
+  int k = 0;
+  for(int i = 0; i < rows; ++i)
+  {
+    for(int j = 0; j < cols; ++j)
+    {
+      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
+      if(item)
+        item->set_text(v.at(k++));
     }
   }
 }
@@ -407,4 +423,85 @@ void Main_win::set_b_clicked()
     read_matrix(b_);
   else
     to_display("b is vector: set col-dim to 1");
+}
+
+void Main_win::save_clicked()
+{
+  try
+  {
+    QFileDialog fd;
+    fd.setDefaultSuffix("mat"); // not working in linux?!
+
+    QString q_form = fd.getSaveFileName(this, tr("Save Matrix"));
+
+    std::ofstream target(q_form.toStdString(), std::ios::trunc);
+
+    for(int i = 0; i < mat_dim_.first; ++i)
+    {
+      for(int j = 0; j < mat_dim_.second; ++j)
+      {
+        auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
+        if(item)
+        {
+          target << item->get_text();
+          target << " ";
+        }
+      }
+      target << "\n";
+    }
+
+    target.close();
+  }
+  catch(...)
+  {
+    to_display("could not save matrix");
+  }
+}
+
+void Main_win::load_clicked()
+{
+  try
+  {
+    QString q_form = QFileDialog::getOpenFileName(this, tr("Load Matrix"));
+
+    std::ifstream f;
+    f.open(q_form.toStdString(), std::ios_base::in);
+
+    if(f.is_open())
+    {
+      int row = 0;
+      int col = 0;
+      char c = 0;
+      bool flag = true;
+
+      while(f.get(c))
+      {
+        if(flag && (c == ' '))
+          col++;
+        if(c == '\n')
+        {
+          row++;
+          flag = false;
+        }
+      }
+
+      f.clear();
+      f.seekg(0, f.beg);
+
+      std::istream_iterator<double> ii{f};
+      std::istream_iterator<double> eos{};
+      std::vector<double> v{ii, eos};
+
+      f.close();
+
+      remove_matrix();
+      build_matrix(row, col);
+      display_matrix(row, col, v);
+    }
+  }
+  catch(std::exception& e)
+  {
+    e.what();
+    to_display("cannot load matrix");
+  }
 }
