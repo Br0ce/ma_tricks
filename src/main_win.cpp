@@ -29,6 +29,8 @@ Main_win::Main_win(QWidget* parent) :
   pending_add_(false),
   pending_minus_(false),
   pending_mul_(false),
+  A_set_(false),
+  b_set_(false),
   dis_char_("ABCDEFGHIJKLMN", 0)
 {
   settings_.setFallbacksEnabled(false);
@@ -62,6 +64,7 @@ void Main_win::init_gui()
   connect(ui_->pb_inv, SIGNAL(clicked(bool)), this, SLOT(inv_clicked()));
   connect(ui_->pb_set_A, SIGNAL(clicked(bool)), this, SLOT(set_A_clicked()));
   connect(ui_->pb_set_b, SIGNAL(clicked(bool)), this, SLOT(set_b_clicked()));
+  connect(ui_->pb_solve, SIGNAL(clicked(bool)), this, SLOT(solve_clicked()));
 
   build_matrix(mat_dim_);
 }
@@ -139,6 +142,17 @@ void Main_win::display_matrix(int rows, int cols, std::vector< double > v)
   }
 }
 
+void Main_win::display_matrix(Main_win::vector& v)
+{
+  for(int i = 0; i < v.rows(); ++i)
+  {
+    auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, 0)->widget());
+    if(item)
+      item->set_text(v(i));
+  }
+}
+
+
 void Main_win::read_matrix(matrix& m)
 {
   m.resize(mat_dim_.first, mat_dim_.second);
@@ -213,6 +227,11 @@ void Main_win::mul_matrix()
 bool Main_win::dim_mismatch()
 {
   return ((pending_factors_.rows() != mat_dim_.first) || (pending_factors_.rows() != mat_dim_.second));
+}
+
+bool Main_win::solve_match()
+{
+  return (A_.cols() == b_.rows());
 }
 
 void Main_win::add_control()
@@ -415,6 +434,7 @@ void Main_win::set_A_clicked()
 {
   A_.resize(mat_dim_.first, mat_dim_.second);
   read_matrix(A_);
+  A_set_ = true;
 }
 
 void Main_win::set_b_clicked()
@@ -423,6 +443,8 @@ void Main_win::set_b_clicked()
     read_matrix(b_);
   else
     to_display("b is vector: set col-dim to 1");
+
+  b_set_ = true;
 }
 
 void Main_win::save_clicked()
@@ -503,5 +525,20 @@ void Main_win::load_clicked()
   {
     e.what();
     to_display("cannot load matrix");
+  }
+}
+
+void Main_win::solve_clicked()
+{
+  if((A_set_ && b_set_) && solve_match())
+  {
+    vector res = A_.householderQr().solve(b_);
+    remove_matrix();
+    build_matrix(res.rows(), 1);
+    display_matrix(res);
+  }
+  else
+  {
+    to_display("first set A and b");
   }
 }

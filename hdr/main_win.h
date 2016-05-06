@@ -37,6 +37,7 @@
 #include <iostream>
 
 #include <Eigen/Dense>
+#include <Eigen/QR>
 
 #include "field.h"
 #include "set_dim.h"
@@ -69,6 +70,7 @@ public:
   void build_matrix(int rows, int cols);
   void remove_matrix();
   void display_matrix(matrix& m);
+  void display_matrix(vector& v);
   void display_matrix(int rows, int cols, std::vector<double> v);
   void read_matrix(matrix& m);
   void read_matrix(vector& v);
@@ -80,6 +82,7 @@ public:
   void sum_matrix();
   void mul_matrix();
   bool dim_mismatch();
+  bool solve_match();
   void add_control();
   void add();
   void add_pending();
@@ -105,6 +108,7 @@ private slots:
   void set_b_clicked();
   void save_clicked();
   void load_clicked();
+  void solve_clicked();
 private:
   Ui::MainWindow* ui_;
   QSettings settings_;
@@ -121,6 +125,8 @@ private:
   bool pending_add_;
   bool pending_minus_;
   bool pending_mul_;
+  bool A_set_;
+  bool b_set_;
   std::pair<QString, char> dis_char_;
 };
 
