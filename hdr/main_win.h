@@ -50,6 +50,7 @@ namespace Ui
 class Main_win;
 }
 
+enum class Status { ADD, MINUS, MUL, EQUAL };
 
 class Main_win : public QMainWindow
 {
@@ -66,6 +67,8 @@ public:
   void read_settings();
   void save_settings();
 
+  Status next_op();
+
   void build_matrix(dim d);
   void build_matrix(int rows, int cols);
   void remove_matrix();
@@ -79,6 +82,7 @@ public:
   QString next_dis_char();
   void reset_display();
 
+  void math_control(Status st);
   void sum_matrix();
   void mul_matrix();
   bool dim_mismatch();
@@ -127,6 +131,8 @@ private:
   bool pending_mul_;
   bool A_set_;
   bool b_set_;
+
+  std::vector<bool> status_;
   std::pair<QString, char> dis_char_;
 };
 

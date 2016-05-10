@@ -31,8 +31,10 @@ Main_win::Main_win(QWidget* parent) :
   pending_mul_(false),
   A_set_(false),
   b_set_(false),
+  status_(5, false),
   dis_char_("ABCDEFGHIJKLMN", 0)
 {
+
   settings_.setFallbacksEnabled(false);
   read_settings();
   init_gui();
@@ -202,6 +204,61 @@ void Main_win::reset_display()
 
 /********************math-operations**********************/
 
+void Main_win::math_control(Status st)
+{
+  switch(st)
+  {
+  case Status::ADD :
+    if(pending_mul_)
+      mul_control();
+
+    add_control();
+    break;
+  case Status::MINUS :
+    if(pending_mul_)
+      mul_control();
+
+    minus_control();
+    break;
+  case Status::MUL :
+    mul_control();
+    break;
+  case Status::EQUAL :
+    if(pending_mul_)
+    {
+      mul_matrix();
+      remove_matrix();
+      build_matrix(pending_factors_.rows(), pending_factors_.cols());
+
+      display_matrix(pending_factors_);
+
+      pending_mul_ = false;
+    }
+
+    if(pending_add_)
+    {
+      sum_matrix();
+      remove_matrix();
+      build_matrix(mat_dim_);
+
+      display_matrix(pending_sum_);
+
+      pending_add_ = false;
+    }
+
+    if(pending_minus_)
+    {
+      diff_matrix();
+      remove_matrix();
+      build_matrix(mat_dim_);
+
+      display_matrix(pending_diff_);
+
+      pending_minus_ = false;
+    }
+    break;
+  }
+}
 
 void Main_win::sum_matrix()
 {
@@ -276,6 +333,7 @@ void Main_win::minus_control()
 
 void Main_win::minus()
 {
+  // mul -1
   read_matrix(pending_diff_);
   remove_matrix();
   build_matrix(mat_dim_);
@@ -341,6 +399,17 @@ void Main_win::inv_matrix()
   display_matrix(n);
 }
 
+/*
+Status Main_win::next_op()
+{
+  if(pending_mul_)
+    return Status::MUL;
+  else if(pending_minus_)
+    return Status::MINUS;
+  else if(pending_add_)
+    return Status::ADD;
+}
+*/
 /***********************slots****************************/
 
 
@@ -357,63 +426,26 @@ void Main_win::set_dim_clicked()
 
 void Main_win::add_clicked()
 {
-  if(pending_mul_)
-    mul_control();
-
-  add_control();
+  math_control(Status::ADD);
   to_display(next_dis_char() + " + ");
 }
 
 void Main_win::minus_clicked()
 {
-  if(pending_mul_)
-    mul_control();
-
-  minus_control();
+  math_control(Status::MINUS);
   to_display(next_dis_char() + " - ");
 }
 
 
 void Main_win::mul_clicked()
 {
+  math_control(Status::MUL);
   to_display(next_dis_char() + " * ");
-  mul_control();
 }
 
 void Main_win::equal_clicked()
 {
-  if(pending_mul_)
-  {
-    mul_matrix();
-    remove_matrix();
-    build_matrix(pending_factors_.rows(), pending_factors_.cols());
-
-    display_matrix(pending_factors_);
-
-    pending_mul_ = false;
-  }
-
-  if(pending_add_)
-  {
-    sum_matrix();
-    remove_matrix();
-    build_matrix(mat_dim_);
-
-    display_matrix(pending_sum_);
-
-    pending_add_ = false;
-  }
-
-  if(pending_minus_)
-  {
-    diff_matrix();
-    remove_matrix();
-    build_matrix(mat_dim_);
-
-    display_matrix(pending_diff_);
-
-    pending_minus_ = false;
-  }
+  math_control(Status::EQUAL);
   to_display(next_dis_char() + " = ");
   to_display(next_dis_char());
 }
