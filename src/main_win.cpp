@@ -25,14 +25,15 @@
 Main_win::Main_win(QWidget* parent) :
   QMainWindow(parent),
   ui_(new Ui::MainWindow),
-  settings_("ma_trick_user", "ma_trick"), // stored in ~/.config/ma_trick_user/ma_trick.conf
+  settings_("ma_trick_user",
+            "ma_trick"), // stored in ~/.config/ma_trick_user/ma_trick.conf
   pending_add_(false),
   pending_minus_(false),
   pending_mul_(false),
   A_set_(false),
   b_set_(false),
   status_(5, false),
-  dis_char_("ABCDEFGHIJKLMN", 0)
+  dis_char_("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0)
 {
 
   settings_.setFallbacksEnabled(false);
@@ -123,7 +124,8 @@ void Main_win::display_matrix(matrix& m)
   {
     for(int j = 0; j < m.cols(); ++j)
     {
-      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
+      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i,
+                                         j)->widget());
       if(item)
         item->set_text(m(i, j));
     }
@@ -137,7 +139,8 @@ void Main_win::display_matrix(int rows, int cols, std::vector< double > v)
   {
     for(int j = 0; j < cols; ++j)
     {
-      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
+      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i,
+                                         j)->widget());
       if(item)
         item->set_text(v.at(k++));
     }
@@ -148,7 +151,8 @@ void Main_win::display_matrix(Main_win::vector& v)
 {
   for(int i = 0; i < v.rows(); ++i)
   {
-    auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, 0)->widget());
+    auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i,
+                                       0)->widget());
     if(item)
       item->set_text(v(i));
   }
@@ -163,7 +167,8 @@ void Main_win::read_matrix(matrix& m)
   {
     for(int j = 0; j < mat_dim_.second; ++j)
     {
-      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
+      auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i,
+                                         j)->widget());
       if(item)
         m(i, j) = item->get_text();
     }
@@ -176,7 +181,8 @@ void Main_win::read_matrix(Main_win::vector& v)
 
   for(int i = 0; i < mat_dim_.first; ++i)
   {
-    auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, 0)->widget());
+    auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i,
+                                       0)->widget());
     if(item)
       v(i) = item->get_text();
   }
@@ -283,7 +289,8 @@ void Main_win::mul_matrix()
 
 bool Main_win::dim_mismatch()
 {
-  return ((pending_factors_.rows() != mat_dim_.first) || (pending_factors_.rows() != mat_dim_.second));
+  return ((pending_factors_.rows() != mat_dim_.first) ||
+          (pending_factors_.rows() != mat_dim_.second));
 }
 
 bool Main_win::solve_match()
@@ -494,7 +501,8 @@ void Main_win::save_clicked()
     {
       for(int j = 0; j < mat_dim_.second; ++j)
       {
-        auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i, j)->widget());
+        auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i,
+                                           j)->widget());
         if(item)
         {
           target << item->get_text();
