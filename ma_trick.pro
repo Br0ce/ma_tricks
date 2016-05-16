@@ -17,7 +17,8 @@ MOC_DIR=gen_bin #Intermediate moc files directory
 HEADERS += hdr/main_win.h \
            hdr/field.h \
            hdr/set_dim.h \
-           hdr/helper.h
+           hdr/helper.h \
+           hdr/math_module.h
            
 FORMS += forms/main_view.ui \
          forms/set_dim.ui
