@@ -51,15 +51,13 @@ OBJECTS_DIR   = gen_bin/
 SOURCES       = src/main.cpp \
 		src/main_win.cpp \
 		src/field.cpp \
-		src/set_dim.cpp \
-		src/math_mod.cpp gen_bin/moc_main_win.cpp \
+		src/set_dim.cpp gen_bin/moc_main_win.cpp \
 		gen_bin/moc_field.cpp \
 		gen_bin/moc_set_dim.cpp
 OBJECTS       = gen_bin/main.o \
 		gen_bin/main_win.o \
 		gen_bin/field.o \
 		gen_bin/set_dim.o \
-		gen_bin/math_mod.o \
 		gen_bin/moc_main_win.o \
 		gen_bin/moc_field.o \
 		gen_bin/moc_set_dim.o
@@ -123,12 +121,10 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		ma_trick.pro hdr/main_win.h \
 		hdr/field.h \
 		hdr/set_dim.h \
-		hdr/math_mod.h \
 		hdr/helper.h src/main.cpp \
 		src/main_win.cpp \
 		src/field.cpp \
-		src/set_dim.cpp \
-		src/math_mod.cpp
+		src/set_dim.cpp
 QMAKE_TARGET  = ma_trick
 DESTDIR       = bin/#avoid trailing-slash linebreak
 TARGET        = bin/ma_trick
@@ -297,8 +293,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents hdr/main_win.h hdr/field.h hdr/set_dim.h hdr/math_mod.h hdr/helper.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/main_win.cpp src/field.cpp src/set_dim.cpp src/math_mod.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents hdr/main_win.h hdr/field.h hdr/set_dim.h hdr/helper.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/main_win.cpp src/field.cpp src/set_dim.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents forms/main_view.ui forms/set_dim.ui $(DISTDIR)/
 
 
@@ -383,9 +379,6 @@ gen_bin/field.o: src/field.cpp hdr/field.h
 gen_bin/set_dim.o: src/set_dim.cpp hdr/set_dim.h \
 		ui_set_dim.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/set_dim.o src/set_dim.cpp
-
-gen_bin/math_mod.o: src/math_mod.cpp hdr/math_mod.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/math_mod.o src/math_mod.cpp
 
 gen_bin/moc_main_win.o: gen_bin/moc_main_win.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/moc_main_win.o gen_bin/moc_main_win.cpp
