@@ -406,17 +406,6 @@ void Main_win::inv_matrix()
   display_matrix(n);
 }
 
-/*
-Status Main_win::next_op()
-{
-  if(pending_mul_)
-    return Status::MUL;
-  else if(pending_minus_)
-    return Status::MINUS;
-  else if(pending_add_)
-    return Status::ADD;
-}
-*/
 /***********************slots****************************/
 
 

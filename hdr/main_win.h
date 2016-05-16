@@ -64,8 +64,6 @@ public:
   void read_settings();
   void save_settings();
 
-  Status next_op();
-
   void build_matrix(dim d);
   void build_matrix(int rows, int cols);
   void remove_matrix();
