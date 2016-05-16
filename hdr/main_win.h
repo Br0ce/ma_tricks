@@ -54,7 +54,9 @@ class Main_win;
 
 class Main_win : public QMainWindow
 {
+
   Q_OBJECT
+
 public:
 
   explicit Main_win(QWidget* parent = 0);
@@ -93,9 +95,13 @@ public:
   void minus();
   void diff_matrix();
   void inv_matrix();
+
 protected:
+
   void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
+
 private slots:
+
   void set_dim_clicked();
   void add_clicked();
   void minus_clicked();
@@ -108,7 +114,9 @@ private slots:
   void save_clicked();
   void load_clicked();
   void solve_clicked();
+
 private:
+
   Ui::MainWindow* ui_;
   QSettings settings_;
 

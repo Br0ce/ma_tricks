@@ -22,6 +22,7 @@
 
 #include "main_win.h"
 
+
 Main_win::Main_win(QWidget* parent) :
   QMainWindow(parent),
   ui_(new Ui::MainWindow),
@@ -35,7 +36,6 @@ Main_win::Main_win(QWidget* parent) :
   status_(5, false),
   dis_char_("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0)
 {
-
   settings_.setFallbacksEnabled(false);
   read_settings();
   init_gui();
@@ -46,7 +46,13 @@ Main_win::~Main_win()
   delete ui_;
 }
 
-/*************************gui administration*********************/
+/**
+ * ***********************************************
+ *
+ * gui administration
+ *
+ * ***********************************************
+ */
 
 
 void Main_win::init_gui()
@@ -94,7 +100,13 @@ void Main_win::closeEvent(QCloseEvent* event)
   QWidget::closeEvent(event);
 }
 
-/*****************gui-matrix-operations*****************/
+/**
+ * ***********************************************
+ *
+ * gui-matrix-operations
+ *
+ * ***********************************************
+ */
 
 
 void Main_win::build_matrix(dim d)
@@ -188,7 +200,13 @@ void Main_win::read_matrix(vector& v)
   }
 }
 
-/********************gui-display-operations***************/
+/**
+ * ***********************************************
+ *
+ * gui-display-operations
+ *
+ * ***********************************************
+ */
 
 
 void Main_win::to_display(QString s)
@@ -208,7 +226,14 @@ void Main_win::reset_display()
   ui_->display->clear();
 }
 
-/********************math-operations**********************/
+/**
+ * ***********************************************
+ *
+ * math-operations
+ *
+ * ***********************************************
+ */
+
 
 void Main_win::math_control(Status st)
 {
@@ -406,7 +431,13 @@ void Main_win::inv_matrix()
   display_matrix(n);
 }
 
-/***********************slots****************************/
+/**
+ * ***********************************************
+ *
+ * slots
+ *
+ * ***********************************************
+ */
 
 
 void Main_win::set_dim_clicked()
