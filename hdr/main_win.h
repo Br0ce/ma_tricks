@@ -41,6 +41,7 @@
 
 #include "field.h"
 #include "set_dim.h"
+#include "helper.h"
 
 #include "ui_main_view.h"
 
@@ -50,15 +51,11 @@ namespace Ui
 class Main_win;
 }
 
-enum class Status { ADD, MINUS, MUL, EQUAL };
 
 class Main_win : public QMainWindow
 {
   Q_OBJECT
 public:
-  using dim = std::pair<int, int>;
-  using matrix = Eigen::MatrixXd;
-  using vector = Eigen::VectorXd;
 
   explicit Main_win(QWidget* parent = 0);
   virtual ~Main_win();

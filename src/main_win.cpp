@@ -147,7 +147,7 @@ void Main_win::display_matrix(int rows, int cols, std::vector< double > v)
   }
 }
 
-void Main_win::display_matrix(Main_win::vector& v)
+void Main_win::display_matrix(vector& v)
 {
   for(int i = 0; i < v.rows(); ++i)
   {
@@ -175,7 +175,7 @@ void Main_win::read_matrix(matrix& m)
   }
 }
 
-void Main_win::read_matrix(Main_win::vector& v)
+void Main_win::read_matrix(vector& v)
 {
   v.resize(mat_dim_.first);
 
@@ -220,7 +220,7 @@ void Main_win::math_control(Status st)
 
     add_control();
     break;
-  case Status::MINUS :
+  case Status::SUB :
     if(pending_mul_)
       mul_control();
 
@@ -439,7 +439,7 @@ void Main_win::add_clicked()
 
 void Main_win::minus_clicked()
 {
-  math_control(Status::MINUS);
+  math_control(Status::SUB);
   to_display(next_dis_char() + " - ");
 }
 
