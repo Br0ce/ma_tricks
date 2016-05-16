@@ -71,4 +71,5 @@ gen_bin
 ui_main_view.h
 ui_set_dim.h
 data/
+log/
 *.kate-swp

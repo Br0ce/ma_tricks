@@ -21,13 +21,57 @@
  */
 
 #include <QApplication>
+#include <QDebug>
+#include <QFile>
+#include <QTextStream>
+#include <QDateTime>
 
 #include "main_win.h"
+
+
+void log_to_file(QtMsgType type, const QMessageLogContext& con, const
+                 QString& msg)
+{
+  QString txt;
+  QString header = QDateTime::currentDateTime().toString();
+
+  switch(type)
+  {
+  case QtDebugMsg:
+    txt = "Debug: " + header + " " + msg;
+    break;
+
+  case QtInfoMsg:
+    txt = "Info: " + header + " " + msg;
+    break;
+
+  case QtWarningMsg:
+    txt = "Warning: " + header + " " + msg;
+    break;
+
+  case QtCriticalMsg:
+    txt = "Critical: " + header + " " + msg;
+    break;
+
+  case QtFatalMsg:
+    txt = "Fatal: " + header + " " + msg;
+    abort();
+  }
+
+  QFile f(QDir::currentPath() + "/log/debug_log.txt");
+
+  if(f.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
+  {
+    QTextStream ts(&f);
+    ts << txt << endl;
+  }
+}
 
 
 int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
+  qInstallMessageHandler(log_to_file);
   Main_win main_win;
   main_win.show();
   return app.exec();

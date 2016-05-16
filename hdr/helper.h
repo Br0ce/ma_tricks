@@ -24,7 +24,6 @@
 #define HELPER_H
 
 #include <utility>
-#include <QDebug>
 
 #include "Eigen/Dense"
 #include "Eigen/QR"
@@ -45,5 +44,6 @@ enum class Operation { ADD, SUB, MUL, EQUAL, INV, TRANS };
 using dim = std::pair<int, int>;
 using matrix = Eigen::MatrixXd;
 using vector = Eigen::VectorXd;
+
 
 #endif // HELPER_H
