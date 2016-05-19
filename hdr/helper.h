@@ -23,10 +23,11 @@
 #ifndef HELPER_H
 #define HELPER_H
 
+#include <QDebug>
+
 #include <utility>
 
-#include "Eigen/Dense"
-#include "Eigen/QR"
+#include <Eigen/Dense>
 
 
 
@@ -37,8 +38,6 @@ qDebug() << Q_FUNC_INFO;
 qDebug() << Q_FUNC_INFO << "in Line" << __LINE__ << ":" << msg;
 
 
-
-enum class Status { ADD, SUB, MUL, EQUAL };
 enum class Operation { ADD, SUB, MUL, EQUAL, INV, TRANS };
 
 using dim = std::pair<int, int>;

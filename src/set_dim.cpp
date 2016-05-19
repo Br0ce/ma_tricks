@@ -22,6 +22,7 @@
 
 #include "set_dim.h"
 
+
 Set_dim::Set_dim(QWidget* parent, std::pair<int, int>& p) :
   QDialog(parent),
   ui_(new Ui::Dialog),
@@ -29,10 +30,17 @@ Set_dim::Set_dim(QWidget* parent, std::pair<int, int>& p) :
 {
   ui_->setupUi(this);
   setWindowTitle("set Matrix Dimensions");
+
+  ui_->spinBox_row->setMinimum(1);
+  ui_->spinBox_row->setMaximum(25);
   ui_->spinBox_row->setValue(p.first);
+
+  ui_->spinBox_col->setMinimum(1);
+  ui_->spinBox_col->setMaximum(25);
   ui_->spinBox_col->setValue(p.second);
 
-  connect(ui_->buttonBox_setup_matrix, SIGNAL(accepted()), this, SLOT(set_matrix_dim()));
+  connect(ui_->buttonBox_setup_matrix, SIGNAL(accepted()), this,
+          SLOT(set_matrix_dim()));
   connect(ui_->buttonBox_setup_matrix, SIGNAL(rejected()), this, SLOT(close()));
 }
 

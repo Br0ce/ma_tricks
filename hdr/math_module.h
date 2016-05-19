@@ -1,6 +1,6 @@
 /** @file math_module.h
  *
- * @brief Class to perform all the math for matricks
+ * @brief Interface to perform all the math for matricks
  *
  * Copyright (C) 2016 @author Niklas Beck, beck@informatik.uni-bonn.de
  *
@@ -23,37 +23,159 @@
 #ifndef MATH_MODULE_H
 #define MATH_MODULE_H
 
-#include "stdexcept"
+#include <stdexcept>
+
+#include <QObject>
 
 #include "helper.h"
 
 
+/**
+ * @brief error handling - derived form std::runtime_error
+ *
+ */
 struct Math_error : std::runtime_error
 {
 
   Math_error() : runtime_error("Math_error") {}
 
-  explicit Math_error(const std::string msg) :
-    runtime_error("Math_error " + msg)
-  {}
+  explicit Math_error(const std::string& msg) :
+    runtime_error("Math_error " + msg) {}
 
 };
 
-class Math_module
+/**
+ * @brief Interface to the mathlogic -derived from QObject
+ *
+ */
+class Math_module : public QObject
 {
+
+  Q_OBJECT
+
 public:
 
+  explicit Math_module(QObject* parent = 0) : QObject(parent) {}
   virtual ~Math_module() = default;
 
-  virtual bool add(matrix& m) = 0;
-  virtual bool sub(matrix& m) = 0;
-  virtual bool mul(matrix& m) = 0;
-  virtual bool inv(matrix& m) = 0;
-  virtual bool trans(matrix& m) = 0;
-  virtual bool equal(matrix& m) = 0;
-  virtual bool solve(matrix& A, matrix& b) = 0;
-  virtual bool polyfit(matrix& x, matrix& b) = 0;
-  virtual matrix& get_res() = 0;
+
+  /**
+   * @brief Publish what is expected from a add-button
+   * in the context of a calculator using
+   * publish_result(const matrix&)
+   *
+   * throws Math_error()
+   *
+   * @param m const matrix&
+   * @return void
+   */
+  virtual void add(const matrix& m) = 0;
+
+
+  /**
+   * @brief Publish what is expected from a sub-button
+   * in the context of a calculator using
+   * publish_result(const matrix&)
+   *
+   * throws Math_error()
+   *
+   * @param m const matrix&
+   * @return void
+   */
+  virtual void sub(const matrix& m) = 0;
+
+
+  /**
+   * @brief Publish what is expected from a mul-button
+   * in the context of a calculator using
+   * publish_result(const matrix&)
+   *
+   * throws Math_error()
+   *
+   * @param m const matrix&
+   * @return void
+   */
+  virtual void mul(const matrix& m) = 0;
+
+
+  /**
+    * @brief Publish what is expected from a equal-button
+    * in the context of a calculator using
+    * publish_result(const matrix&)
+    *
+    * throws Math_error()
+    *
+    * @param m const matrix&
+    * @return void
+    */
+  virtual void equal(const matrix& m) = 0;
+
+
+  /**
+   * @brief Publish the invert of matrix m using
+   * publish_result(const matrix&)
+   *
+   * @param m const matrix&
+   * @return void
+   */
+  virtual void inv(const matrix& m) = 0;
+
+
+  /**
+   * @brief Publish the dotproduct < x, y > using
+   * publish_result(const matrix&)
+   *
+   * throws Math_error() if x or y not vector
+   *
+   * @param x const matrix& - has do be a vector!
+   * @param y const matrix& - has do be a vector!
+   * @return void
+   */
+  virtual void dot(const matrix& x, const matrix& y) = 0;
+
+
+  /**
+   * @brief Publish the determinant of matrix m using
+   * publish_result(const matrix&)
+   *
+   * @param m const matrix&
+   * @return void
+   */
+  virtual void det(const matrix& m) = 0;
+
+
+  /**
+   * @brief Publish the transpose of matrix m using
+   * publish_result(const matrix&)
+   *
+   * @param m const matrix&
+   * @return void
+   */
+  virtual void trans(const matrix& m) = 0;
+
+
+  /**
+   * @brief Publish vector x == least-square solution to Ax=b
+   *
+   * throws Math_error()
+   *
+   * @param A const matrix&
+   * @param b const matrix& - has to be a vector
+   * @return void
+   */
+  virtual void solve(const matrix& A, const matrix& b) = 0;
+
+
+  /**
+   * @brief Clears out all tmp-matrices
+   *
+   * @return void
+   */
+  virtual void clear() = 0;
+
+signals:
+
+  void publish_result(const matrix& m);
 
 };
 

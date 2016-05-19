@@ -1,6 +1,6 @@
 /** @file main_win.h
  *
- * @brief MainWindow form small gui_wrapper for eigen.
+ * @brief MainWindow is a gui for matricks - gui-wrapper for eigen3.
  *
  * Copyright (C) 2016  @author Niklas Beck, beck@informatik.uni-bonn.de
  *
@@ -28,20 +28,22 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QString>
-
-#include <QDebug>
+// #include <QDebug>
 
 #include <vector>
 #include <fstream>
 #include <istream>
 #include <iostream>
+#include <memory>
 
 #include <Eigen/Dense>
-#include <Eigen/QR>
+// #include <Eigen/QR>
 
 #include "field.h"
 #include "set_dim.h"
 #include "helper.h"
+#include "math_module.h"
+#include "simple_math.h"
 
 #include "ui_main_view.h"
 
@@ -52,6 +54,10 @@ class Main_win;
 }
 
 
+/**
+ * @brief MainWindow for gui-wrapper to eigen3 : Matricks
+ *
+ */
 class Main_win : public QMainWindow
 {
 
@@ -66,35 +72,21 @@ public:
   void read_settings();
   void save_settings();
 
-  void build_matrix(dim d);
-  void build_matrix(int rows, int cols);
+  void build_matrix(const dim d);
+  void build_matrix(const int rows, const int cols);
   void remove_matrix();
-  void display_matrix(matrix& m);
-  void display_matrix(vector& v);
-  void display_matrix(int rows, int cols, std::vector<double> v);
+  void display_matrix(const matrix& m);
+  void display_matrix(const vector& v);//TODO delete
+  void display_matrix(const int rows, const int cols, const std::vector<double>&
+                      v);
   void read_matrix(matrix& m);
   void read_matrix(vector& v);
 
-  void to_display(QString s);
-  QString next_dis_char();
+  void to_display(const QString s) const;
+  QString next_display_char();
   void reset_display();
 
-  void math_control(Status st);
-  void sum_matrix();
-  void mul_matrix();
-  bool dim_mismatch();
-  bool solve_match();
-  void add_control();
-  void add();
-  void add_pending();
-  void mul_control();
-  void mul();
-  bool mul_pending();
-  void minus_control();
-  void minus_pending();
-  void minus();
-  void diff_matrix();
-  void inv_matrix();
+  void resize_main_win(const dim d);
 
 protected:
 
@@ -102,41 +94,56 @@ protected:
 
 private slots:
 
-  void set_dim_clicked();
-  void add_clicked();
-  void minus_clicked();
-  void mul_clicked();
-  void equal_clicked();
-  void clear_clicked();
-  void inv_clicked();
   void set_A_clicked();
   void set_b_clicked();
+  void set_x_clicked();
+  void set_dim_clicked();
+  void mul_clicked();
+  void add_clicked();
+  void sub_clicked();
+  void clear_clicked();
+  void trans_clicked();
+  void inv_clicked();
+  void dot_clicked();
+
+  void solve_clicked();
+  void det_clicked();
+  void equal_clicked();
+
+
   void save_clicked();
   void load_clicked();
-  void solve_clicked();
+  void display_result(const matrix& m);
 
 private:
 
   Ui::MainWindow* ui_;
   QSettings settings_;
 
-  matrix pending_sum_;
-  matrix pending_diff_;
-  matrix pending_factors_;
-  matrix A_;
-  vector b_;
+  /**
+   * minimum height-size of MainWindow for the buttonsection
+   */
+  static constexpr int h_size_ = 400;
 
-  dim mat_dim_;
+  /**
+   * minimum width-size of MainWindow for the buttonsection
+   */
+  static constexpr int w_size_ = 275;
+
+  std::unique_ptr<Math_module> math_;
+
+  matrix A_;
+  matrix b_;
+  matrix x_;
+
+  dim mat_dim_;  // dimensions of the displayed matrix
   dim mat_dim_tmp_;
 
-  bool pending_add_;
-  bool pending_minus_;
-  bool pending_mul_;
   bool A_set_;
   bool b_set_;
+  bool x_set_;
 
-  std::vector<bool> status_;
-  std::pair<QString, char> dis_char_;
+  std::pair<const QString, char> dis_char_;
 };
 
 #endif // MAIN_WIN_H

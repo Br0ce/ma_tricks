@@ -51,16 +51,20 @@ OBJECTS_DIR   = gen_bin/
 SOURCES       = src/main.cpp \
 		src/main_win.cpp \
 		src/field.cpp \
-		src/set_dim.cpp gen_bin/moc_main_win.cpp \
+		src/set_dim.cpp \
+		src/simple_math.cpp gen_bin/moc_main_win.cpp \
 		gen_bin/moc_field.cpp \
-		gen_bin/moc_set_dim.cpp
+		gen_bin/moc_set_dim.cpp \
+		gen_bin/moc_math_module.cpp
 OBJECTS       = gen_bin/main.o \
 		gen_bin/main_win.o \
 		gen_bin/field.o \
 		gen_bin/set_dim.o \
+		gen_bin/simple_math.o \
 		gen_bin/moc_main_win.o \
 		gen_bin/moc_field.o \
-		gen_bin/moc_set_dim.o
+		gen_bin/moc_set_dim.o \
+		gen_bin/moc_math_module.o
 DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
 		/usr/lib64/qt5/mkspecs/common/linux.conf \
@@ -121,10 +125,13 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		ma_trick.pro hdr/main_win.h \
 		hdr/field.h \
 		hdr/set_dim.h \
-		hdr/helper.h src/main.cpp \
+		hdr/helper.h \
+		hdr/simple_math.h \
+		hdr/math_module.h src/main.cpp \
 		src/main_win.cpp \
 		src/field.cpp \
-		src/set_dim.cpp
+		src/set_dim.cpp \
+		src/simple_math.cpp
 QMAKE_TARGET  = ma_trick
 DESTDIR       = bin/#avoid trailing-slash linebreak
 TARGET        = bin/ma_trick
@@ -293,8 +300,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents hdr/main_win.h hdr/field.h hdr/set_dim.h hdr/helper.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/main_win.cpp src/field.cpp src/set_dim.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents hdr/main_win.h hdr/field.h hdr/set_dim.h hdr/helper.h hdr/simple_math.h hdr/math_module.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/main_win.cpp src/field.cpp src/set_dim.cpp src/simple_math.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents forms/main_view.ui forms/set_dim.ui $(DISTDIR)/
 
 
@@ -318,13 +325,15 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: gen_bin/moc_main_win.cpp gen_bin/moc_field.cpp gen_bin/moc_set_dim.cpp
+compiler_moc_header_make_all: gen_bin/moc_main_win.cpp gen_bin/moc_field.cpp gen_bin/moc_set_dim.cpp gen_bin/moc_math_module.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) gen_bin/moc_main_win.cpp gen_bin/moc_field.cpp gen_bin/moc_set_dim.cpp
+	-$(DEL_FILE) gen_bin/moc_main_win.cpp gen_bin/moc_field.cpp gen_bin/moc_set_dim.cpp gen_bin/moc_math_module.cpp
 gen_bin/moc_main_win.cpp: hdr/field.h \
 		hdr/set_dim.h \
 		ui_set_dim.h \
 		hdr/helper.h \
+		hdr/math_module.h \
+		hdr/simple_math.h \
 		ui_main_view.h \
 		hdr/main_win.h
 	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/br0ce/Projekte/ma_trick -I/home/br0ce/Projekte/ma_trick/hdr -I/usr/include/eigen3 -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8.5 -I/usr/include/c++/4.8.5/x86_64-redhat-linux -I/usr/include/c++/4.8.5/backward -I/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include -I/usr/local/include -I/usr/include hdr/main_win.h -o gen_bin/moc_main_win.cpp
@@ -335,6 +344,10 @@ gen_bin/moc_field.cpp: hdr/field.h
 gen_bin/moc_set_dim.cpp: ui_set_dim.h \
 		hdr/set_dim.h
 	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/br0ce/Projekte/ma_trick -I/home/br0ce/Projekte/ma_trick/hdr -I/usr/include/eigen3 -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8.5 -I/usr/include/c++/4.8.5/x86_64-redhat-linux -I/usr/include/c++/4.8.5/backward -I/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include -I/usr/local/include -I/usr/include hdr/set_dim.h -o gen_bin/moc_set_dim.cpp
+
+gen_bin/moc_math_module.cpp: hdr/helper.h \
+		hdr/math_module.h
+	/usr/lib64/qt5/bin/moc $(DEFINES) -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/br0ce/Projekte/ma_trick -I/home/br0ce/Projekte/ma_trick/hdr -I/usr/include/eigen3 -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/4.8.5 -I/usr/include/c++/4.8.5/x86_64-redhat-linux -I/usr/include/c++/4.8.5/backward -I/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include -I/usr/local/include -I/usr/include hdr/math_module.h -o gen_bin/moc_math_module.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -362,6 +375,8 @@ gen_bin/main.o: src/main.cpp hdr/main_win.h \
 		hdr/set_dim.h \
 		ui_set_dim.h \
 		hdr/helper.h \
+		hdr/math_module.h \
+		hdr/simple_math.h \
 		ui_main_view.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/main.o src/main.cpp
 
@@ -370,6 +385,8 @@ gen_bin/main_win.o: src/main_win.cpp hdr/main_win.h \
 		hdr/set_dim.h \
 		ui_set_dim.h \
 		hdr/helper.h \
+		hdr/math_module.h \
+		hdr/simple_math.h \
 		ui_main_view.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/main_win.o src/main_win.cpp
 
@@ -380,6 +397,11 @@ gen_bin/set_dim.o: src/set_dim.cpp hdr/set_dim.h \
 		ui_set_dim.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/set_dim.o src/set_dim.cpp
 
+gen_bin/simple_math.o: src/simple_math.cpp hdr/simple_math.h \
+		hdr/math_module.h \
+		hdr/helper.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/simple_math.o src/simple_math.cpp
+
 gen_bin/moc_main_win.o: gen_bin/moc_main_win.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/moc_main_win.o gen_bin/moc_main_win.cpp
 
@@ -388,6 +410,9 @@ gen_bin/moc_field.o: gen_bin/moc_field.cpp
 
 gen_bin/moc_set_dim.o: gen_bin/moc_set_dim.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/moc_set_dim.o gen_bin/moc_set_dim.cpp
+
+gen_bin/moc_math_module.o: gen_bin/moc_math_module.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gen_bin/moc_math_module.o gen_bin/moc_math_module.cpp
 
 ####### Install
 

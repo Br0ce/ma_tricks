@@ -1,6 +1,6 @@
 /** @file field.h
  *
- * @brief QLineEdit to be the field in a matix
+ * @brief QLineEdit to be the field in a matrix
  *
  * Copyright (C) 2016  @author Niklas Beck, beck@informatik.uni-bonn.de
  *
@@ -26,14 +26,25 @@
 #include <QLineEdit>
 #include <QDoubleValidator>
 
+
+/**
+ * @brief Holds the value of the matrix at (x,y)
+ *
+ */
 class Field : public QLineEdit
 {
+
   Q_OBJECT
+
 public:
+
   explicit Field(QWidget* parent = 0);
-  double get_text();
-  void set_text(double d);
-private:
+
+  double get_text() const;
+  void set_text(const double d);
+
+  QSize sizeHint() const override;
+
 };
 
 #endif // FIELD_H

@@ -27,16 +27,29 @@
 
 #include "ui_set_dim.h"
 
+
+/**
+ * @brief QDialog to set dimensions of displayed matrix
+ *
+ */
 class Set_dim : public QDialog
 {
+
   Q_OBJECT
+
 public:
+
   explicit Set_dim(QWidget* parent, std::pair<int, int>& p);
   virtual ~Set_dim();
+
 private slots:
+
   void set_matrix_dim();
+
 private:
+
   Ui::Dialog* ui_;
+
   std::pair<int, int>& p_;
 };
 

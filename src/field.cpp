@@ -26,17 +26,20 @@
 Field::Field(QWidget* parent) :
   QLineEdit(parent)
 {
-  this->setValidator(new QDoubleValidator);
+  this->setValidator(new QDoubleValidator(this));
   this->setAlignment(Qt::AlignRight);
   this->setText("0");
+
+  setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
 
-double Field::get_text()
-{
-  return this->text().toDouble();
-}
+double Field::get_text() const { return this->text().toDouble(); }
 
-void Field::set_text(double d)
+void Field::set_text(const double d) { this->setText(QString::number(d)); }
+
+QSize Field::sizeHint() const
 {
-  this->setText(QString::number(d));
+  QSize size = QLineEdit::sizeHint();
+  size.rwidth() = 50;
+  return size;
 }

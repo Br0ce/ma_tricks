@@ -1,6 +1,6 @@
 /** @file main_win.cpp
  *
- * @brief MainWindow form small gui_wrapper for eigen.
+ * @brief MainWindow form gui_wrapper for eigen3.
  *
  * Copyright (C) 2016  @author Niklas Beck, beck@informatik.uni-bonn.de
  *
@@ -28,12 +28,9 @@ Main_win::Main_win(QWidget* parent) :
   ui_(new Ui::MainWindow),
   settings_("ma_trick_user",
             "ma_trick"), // stored in ~/.config/ma_trick_user/ma_trick.conf
-  pending_add_(false),
-  pending_minus_(false),
-  pending_mul_(false),
+  math_(new Simple_math(this)),
   A_set_(false),
   b_set_(false),
-  status_(5, false),
   dis_char_("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0)
 {
   settings_.setFallbacksEnabled(false);
@@ -41,10 +38,13 @@ Main_win::Main_win(QWidget* parent) :
   init_gui();
 }
 
+
 Main_win::~Main_win()
 {
   delete ui_;
 }
+
+
 
 /**
  * ***********************************************
@@ -58,25 +58,40 @@ Main_win::~Main_win()
 void Main_win::init_gui()
 {
   ui_->setupUi(this);
+
+  this->setWindowTitle(tr("Matricks"));
+
   ui_->display->setReadOnly(true);
   ui_->display->setAlignment(Qt::AlignRight);
 
-  connect(ui_->action_save, SIGNAL(triggered(bool)), this, SLOT(save_clicked()));
+  ui_->main_layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+  connect(ui_->action_save, SIGNAL(triggered(bool)), this,
+          SLOT(save_clicked()));
   connect(ui_->action_load, SIGNAL(triggered(bool)), this, SLOT(load_clicked()));
   connect(ui_->action_beenden, SIGNAL(triggered(bool)), this, SLOT(close()));
+
   connect(ui_->pb_set_dim, SIGNAL(clicked(bool)), this, SLOT(set_dim_clicked()));
   connect(ui_->pb_equal, SIGNAL(clicked(bool)), this, SLOT(equal_clicked()));
   connect(ui_->pb_plus, SIGNAL(clicked(bool)), this, SLOT(add_clicked()));
-  connect(ui_->pb_minus, SIGNAL(clicked(bool)), this, SLOT(minus_clicked()));
+  connect(ui_->pb_sub, SIGNAL(clicked(bool)), this, SLOT(sub_clicked()));
   connect(ui_->pb_mul, SIGNAL(clicked(bool)), this, SLOT(mul_clicked()));
   connect(ui_->pb_clear, SIGNAL(clicked(bool)), this, SLOT(clear_clicked()));
   connect(ui_->pb_inv, SIGNAL(clicked(bool)), this, SLOT(inv_clicked()));
   connect(ui_->pb_set_A, SIGNAL(clicked(bool)), this, SLOT(set_A_clicked()));
   connect(ui_->pb_set_b, SIGNAL(clicked(bool)), this, SLOT(set_b_clicked()));
   connect(ui_->pb_solve, SIGNAL(clicked(bool)), this, SLOT(solve_clicked()));
+  connect(ui_->pb_trans, SIGNAL(clicked(bool)), this, SLOT(trans_clicked()));
+  connect(ui_->pb_set_x, SIGNAL(clicked(bool)), this, SLOT(set_x_clicked()));
+  connect(ui_->pb_dot, SIGNAL(clicked(bool)), this, SLOT(dot_clicked()));
+  connect(ui_->pb_det, SIGNAL(clicked(bool)), this, SLOT(det_clicked()));
+
+  connect(math_.get(), SIGNAL(publish_result(const matrix&)), this,
+          SLOT(display_result(const matrix&)));
 
   build_matrix(mat_dim_);
 }
+
 
 void Main_win::read_settings()
 {
@@ -87,6 +102,7 @@ void Main_win::read_settings()
   mat_dim_tmp_.second = mat_dim_.second;
 }
 
+
 void Main_win::save_settings()
 {
   settings_.beginGroup("activ_mat");
@@ -94,11 +110,33 @@ void Main_win::save_settings()
   settings_.setValue("dim_col", mat_dim_.second);
 }
 
+
 void Main_win::closeEvent(QCloseEvent* event)
 {
   save_settings();
   QWidget::closeEvent(event);
 }
+
+
+void Main_win::resize_main_win(const dim d)
+{
+  int h = h_size_;
+  int w = w_size_;
+
+  // 37 == height of 1 row
+  if(d.first > 1)
+    h += (d.first - 1) * 37;
+
+  // 17 == width of col no. 5, 56 == width of col no. > 5
+  if(d.second == 5)
+    w += 17;
+  else if(d.second > 5)
+    w += 17 + ((d.second - 5) * 56);
+
+  this->setFixedSize(w, h);
+}
+
+
 
 /**
  * ***********************************************
@@ -109,19 +147,27 @@ void Main_win::closeEvent(QCloseEvent* event)
  */
 
 
-void Main_win::build_matrix(dim d)
+void Main_win::build_matrix(const dim d)
 {
   for(int i = 0; i < d.first; ++i)
     for(int j = 0; j < d.second; ++j)
-      ui_->mat_layout->addWidget(new Field(), i, j);
+      ui_->mat_layout->addWidget(new Field(this), i, j,
+                                 Qt::AlignHCenter | Qt::AlignBottom);
+
+  resize_main_win(d);
 }
 
-void Main_win::build_matrix(int rows, int cols)
+
+void Main_win::build_matrix(const int rows, const int cols)
 {
   for(int i = 0; i < rows; ++i)
     for(int j = 0; j < cols; ++j)
-      ui_->mat_layout->addWidget(new Field(), i, j);
+      ui_->mat_layout->addWidget(new Field(this), i, j, Qt::AlignHCenter |
+                                 Qt::AlignBottom);
+
+  resize_main_win(std::make_pair(rows, cols));
 }
+
 
 void Main_win::remove_matrix()
 {
@@ -130,7 +176,8 @@ void Main_win::remove_matrix()
       delete ui_->mat_layout->itemAtPosition(i, j)->widget();
 }
 
-void Main_win::display_matrix(matrix& m)
+
+void Main_win::display_matrix(const matrix& m)
 {
   for(int i = 0; i < m.rows(); ++i)
   {
@@ -144,7 +191,9 @@ void Main_win::display_matrix(matrix& m)
   }
 }
 
-void Main_win::display_matrix(int rows, int cols, std::vector< double > v)
+
+void Main_win::display_matrix(const int rows, const int cols, const
+                              std::vector<double>& v)
 {
   int k = 0;
   for(int i = 0; i < rows; ++i)
@@ -159,7 +208,8 @@ void Main_win::display_matrix(int rows, int cols, std::vector< double > v)
   }
 }
 
-void Main_win::display_matrix(vector& v)
+
+void Main_win::display_matrix(const vector& v)
 {
   for(int i = 0; i < v.rows(); ++i)
   {
@@ -187,6 +237,7 @@ void Main_win::read_matrix(matrix& m)
   }
 }
 
+
 void Main_win::read_matrix(vector& v)
 {
   v.resize(mat_dim_.first);
@@ -200,6 +251,8 @@ void Main_win::read_matrix(vector& v)
   }
 }
 
+
+
 /**
  * ***********************************************
  *
@@ -209,16 +262,18 @@ void Main_win::read_matrix(vector& v)
  */
 
 
-void Main_win::to_display(QString s)
+void Main_win::to_display(const QString s) const
 {
   QString tmp = ui_->display->text();
   ui_->display->setText(tmp + s);
 }
 
-QString Main_win::next_dis_char()
+
+QString Main_win::next_display_char()
 {
   return dis_char_.first.at(dis_char_.second++);
 }
+
 
 void Main_win::reset_display()
 {
@@ -226,210 +281,7 @@ void Main_win::reset_display()
   ui_->display->clear();
 }
 
-/**
- * ***********************************************
- *
- * math-operations
- *
- * ***********************************************
- */
 
-
-void Main_win::math_control(Status st)
-{
-  switch(st)
-  {
-  case Status::ADD :
-    if(pending_mul_)
-      mul_control();
-
-    add_control();
-    break;
-  case Status::SUB :
-    if(pending_mul_)
-      mul_control();
-
-    minus_control();
-    break;
-  case Status::MUL :
-    mul_control();
-    break;
-  case Status::EQUAL :
-    if(pending_mul_)
-    {
-      mul_matrix();
-      remove_matrix();
-      build_matrix(pending_factors_.rows(), pending_factors_.cols());
-
-      display_matrix(pending_factors_);
-
-      pending_mul_ = false;
-    }
-
-    if(pending_add_)
-    {
-      sum_matrix();
-      remove_matrix();
-      build_matrix(mat_dim_);
-
-      display_matrix(pending_sum_);
-
-      pending_add_ = false;
-    }
-
-    if(pending_minus_)
-    {
-      diff_matrix();
-      remove_matrix();
-      build_matrix(mat_dim_);
-
-      display_matrix(pending_diff_);
-
-      pending_minus_ = false;
-    }
-    break;
-  }
-}
-
-void Main_win::sum_matrix()
-{
-  matrix m(mat_dim_.first, mat_dim_.second);
-  read_matrix(m);
-  pending_sum_ += m;
-}
-
-void Main_win::diff_matrix()
-{
-  matrix m(mat_dim_.first, mat_dim_.second);
-  read_matrix(m);
-  pending_diff_ -= m;
-}
-
-void Main_win::mul_matrix()
-{
-  matrix m(mat_dim_.first, mat_dim_.second);
-  read_matrix(m);
-  pending_factors_ *= m;
-}
-
-bool Main_win::dim_mismatch()
-{
-  return ((pending_factors_.rows() != mat_dim_.first) ||
-          (pending_factors_.rows() != mat_dim_.second));
-}
-
-bool Main_win::solve_match()
-{
-  return (A_.cols() == b_.rows());
-}
-
-void Main_win::add_control()
-{
-  if(pending_add_)
-  {
-    add_pending();
-  }
-  else
-  {
-    add();
-    pending_add_ = true;
-  }
-}
-
-void Main_win::add()
-{
-  read_matrix(pending_sum_);
-  remove_matrix();
-  build_matrix(mat_dim_);
-}
-
-void Main_win::add_pending()
-{
-  sum_matrix();
-  remove_matrix();
-  build_matrix(mat_dim_);
-}
-
-void Main_win::minus_control()
-{
-  if(pending_minus_)
-  {
-    minus_pending();
-  }
-  else
-  {
-    minus();
-    pending_minus_ = true;
-  }
-}
-
-void Main_win::minus()
-{
-  // mul -1
-  read_matrix(pending_diff_);
-  remove_matrix();
-  build_matrix(mat_dim_);
-}
-
-void Main_win::minus_pending()
-{
-  diff_matrix();
-  remove_matrix();
-  build_matrix(mat_dim_);
-}
-
-void Main_win::mul_control()
-{
-  if(pending_mul_)
-  {
-    if(!mul_pending())
-    {
-      reset_display();
-      to_display("matrix dimensions to not match: reset to last matrix");
-    }
-  }
-  else
-  {
-    mul();
-    pending_mul_ = true;
-  }
-}
-
-void Main_win::mul()
-{
-  read_matrix(pending_factors_);
-  remove_matrix();
-  build_matrix(mat_dim_);
-}
-
-bool Main_win::mul_pending()
-{
-  if(!dim_mismatch())
-  {
-    mul_matrix();
-    remove_matrix();
-    build_matrix(mat_dim_);
-    return true;
-  }
-  else
-  {
-    remove_matrix();
-    build_matrix(pending_factors_.rows(), pending_factors_.cols());
-    display_matrix(pending_factors_);
-    return false;
-  }
-}
-
-void Main_win::inv_matrix()
-{
-  matrix m(mat_dim_.first, mat_dim_.second);
-  read_matrix(m);
-  matrix n = m.inverse();
-
-  remove_matrix();
-  build_matrix(mat_dim_);
-  display_matrix(n);
-}
 
 /**
  * ***********************************************
@@ -440,55 +292,6 @@ void Main_win::inv_matrix()
  */
 
 
-void Main_win::set_dim_clicked()
-{
-  Set_dim dialog_set_dim(this, mat_dim_tmp_);
-  dialog_set_dim.setModal(true);
-  dialog_set_dim.exec();
-
-  remove_matrix();
-  build_matrix(mat_dim_tmp_);
-  mat_dim_ = mat_dim_tmp_;
-}
-
-void Main_win::add_clicked()
-{
-  math_control(Status::ADD);
-  to_display(next_dis_char() + " + ");
-}
-
-void Main_win::minus_clicked()
-{
-  math_control(Status::SUB);
-  to_display(next_dis_char() + " - ");
-}
-
-
-void Main_win::mul_clicked()
-{
-  math_control(Status::MUL);
-  to_display(next_dis_char() + " * ");
-}
-
-void Main_win::equal_clicked()
-{
-  math_control(Status::EQUAL);
-  to_display(next_dis_char() + " = ");
-  to_display(next_dis_char());
-}
-
-void Main_win::clear_clicked()
-{
-  remove_matrix();
-  build_matrix(mat_dim_);
-  reset_display();
-}
-
-void Main_win::inv_clicked()
-{
-  inv_matrix();
-}
-
 void Main_win::set_A_clicked()
 {
   A_.resize(mat_dim_.first, mat_dim_.second);
@@ -496,26 +299,241 @@ void Main_win::set_A_clicked()
   A_set_ = true;
 }
 
+
 void Main_win::set_b_clicked()
 {
   if(mat_dim_.second == 1)
     read_matrix(b_);
   else
+  {
+    reset_display();
     to_display("b is vector: set col-dim to 1");
+  }
 
   b_set_ = true;
 }
+
+
+void Main_win::set_x_clicked()
+{
+  if(mat_dim_.second == 1)
+    read_matrix(x_);
+  else
+  {
+    reset_display();
+    to_display("x is vector: set col-dim to 1");
+  }
+
+  x_set_ = true;
+}
+
+
+void Main_win::set_dim_clicked()
+{
+  Set_dim dialog_set_dim(this, mat_dim_tmp_);
+  dialog_set_dim.setModal(true);
+
+  dialog_set_dim.show();
+  dialog_set_dim.exec();
+
+  remove_matrix();
+  build_matrix(mat_dim_tmp_);
+  mat_dim_ = mat_dim_tmp_;
+}
+
+
+void Main_win::mul_clicked()
+{
+  matrix m(mat_dim_.first, mat_dim_.second);
+  read_matrix(m);
+
+  try
+  {
+    math_->mul(m);
+
+    to_display(next_display_char() + " * ");
+  }
+  catch(std::exception& e)
+  {
+    to_display(e.what());
+  }
+}
+
+
+void Main_win::add_clicked()
+{
+  matrix m(mat_dim_.first, mat_dim_.second);
+  read_matrix(m);
+
+  try
+  {
+    math_->add(m);
+
+    to_display(next_display_char() + " + ");
+  }
+  catch(std::exception& e)
+  {
+    to_display(e.what());
+  }
+}
+
+
+void Main_win::sub_clicked()
+{
+  matrix m(mat_dim_.first, mat_dim_.second);
+  read_matrix(m);
+
+  try
+  {
+    math_->sub(m);
+
+    to_display(next_display_char() + " - ");
+  }
+  catch(std::exception& e)
+  {
+    to_display(e.what());
+  }
+}
+
+
+void Main_win::clear_clicked()
+{
+  math_->clear();
+
+  remove_matrix();
+  build_matrix(mat_dim_);
+  reset_display();
+}
+
+
+void Main_win::trans_clicked()
+{
+  matrix m(mat_dim_.first, mat_dim_.second);
+  read_matrix(m);
+
+  math_->trans(m);
+
+  to_display("(");
+  to_display(dis_char_.first.at(dis_char_.second));
+  to_display(")trans");
+}
+
+
+void Main_win::inv_clicked()
+{
+  matrix m(mat_dim_.first, mat_dim_.second);
+  read_matrix(m);
+
+  math_->inv(m);
+
+  to_display("(");
+  to_display(dis_char_.first.at(dis_char_.second));
+  to_display(")inv");
+}
+
+
+void Main_win::dot_clicked()
+{
+  try
+  {
+    if(x_set_ && b_set_)
+    {
+      math_->dot(x_, b_);
+
+      reset_display();
+      to_display("< x , b > = a");
+    }
+    else
+    {
+      reset_display();
+      to_display("first set x and b");
+    }
+  }
+  catch(std::exception& e)
+  {
+    reset_display();
+    to_display(e.what());
+  }
+}
+
+
+void Main_win::solve_clicked()
+{
+  try
+  {
+    if(A_set_ && b_set_)
+    {
+      math_->solve(A_, b_);
+
+      reset_display();
+      to_display("x = least-squares solution");
+    }
+    else
+    {
+      reset_display();
+      to_display("first set A and b");
+    }
+  }
+  catch(std::exception& e)
+  {
+    reset_display();
+    to_display(e.what());
+  }
+}
+
+
+void Main_win::det_clicked()
+{
+  try
+  {
+    matrix m(mat_dim_.first, mat_dim_.second);
+    read_matrix(m);
+
+    math_->det(m);
+
+    to_display("(");
+    to_display(dis_char_.first.at(dis_char_.second));
+    to_display(")det");
+  }
+  catch(std::exception& e)
+  {
+    reset_display();
+    to_display(e.what());
+  }
+}
+
+
+void Main_win::equal_clicked()
+{
+  matrix m(mat_dim_.first, mat_dim_.second);
+  read_matrix(m);
+
+  try
+  {
+    math_->equal(m);
+
+    to_display(next_display_char() + " = ");
+    to_display(next_display_char());
+  }
+  catch(std::exception& e)
+  {
+    to_display(e.what());
+  }
+}
+
 
 void Main_win::save_clicked()
 {
   try
   {
     QFileDialog fd;
-    fd.setDefaultSuffix("mat"); // not working in linux?!
+    fd.setDefaultSuffix(".mat"); // not working under linux?!
 
     QString q_form = fd.getSaveFileName(this, tr("Save Matrix"));
 
     std::ofstream target(q_form.toStdString(), std::ios::trunc);
+
+    if(target.fail()) throw std::ios_base::failure("cannot save matrix");
 
     for(int i = 0; i < mat_dim_.first; ++i)
     {
@@ -524,19 +542,16 @@ void Main_win::save_clicked()
         auto item = qobject_cast< Field* >(ui_->mat_layout->itemAtPosition(i,
                                            j)->widget());
         if(item)
-        {
-          target << item->get_text();
-          target << " ";
-        }
+          target << item->get_text() << " ";
       }
       target << "\n";
     }
 
     target.close();
   }
-  catch(...)
+  catch(std::exception& e)
   {
-    to_display("could not save matrix");
+    to_display(e.what());
   }
 }
 
@@ -577,28 +592,37 @@ void Main_win::load_clicked()
       f.close();
 
       remove_matrix();
+
       build_matrix(row, col);
+
+      mat_dim_.first = row;
+      mat_dim_.second = col;
+
+      mat_dim_tmp_.first = row;
+      mat_dim_tmp_.second = col;
+
       display_matrix(row, col, v);
     }
+    else throw std::ios_base::failure("cannot open file");
   }
   catch(std::exception& e)
   {
     e.what();
-    to_display("cannot load matrix");
+    to_display(e.what());
   }
 }
 
-void Main_win::solve_clicked()
+
+void Main_win::display_result(const matrix& m)
 {
-  if((A_set_ && b_set_) && solve_match())
-  {
-    vector res = A_.householderQr().solve(b_);
-    remove_matrix();
-    build_matrix(res.rows(), 1);
-    display_matrix(res);
-  }
-  else
-  {
-    to_display("first set A and b");
-  }
+  remove_matrix();
+  build_matrix(m.rows(), m.cols());
+
+  mat_dim_.first = m.rows();
+  mat_dim_.second = m.cols();
+
+  mat_dim_tmp_.first = m.rows();
+  mat_dim_tmp_.second = m.cols();
+
+  display_matrix(m);
 }

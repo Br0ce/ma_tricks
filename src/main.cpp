@@ -20,6 +20,8 @@
  *
  */
 
+#include <memory>
+
 #include <QApplication>
 #include <QDebug>
 #include <QFile>
@@ -29,6 +31,14 @@
 #include "main_win.h"
 
 
+/**
+ * @brief put debug-messages in file: /log/debug_log.txt
+ *
+ * @param type QtMsgType
+ * @param con QMessageLogContext -- not used
+ * @param msg QString
+ * @return void
+ */
 void log_to_file(QtMsgType type, const QMessageLogContext& con, const
                  QString& msg)
 {
@@ -71,8 +81,11 @@ void log_to_file(QtMsgType type, const QMessageLogContext& con, const
 int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
+
   qInstallMessageHandler(log_to_file);
+
   Main_win main_win;
+
   main_win.show();
   return app.exec();
 }
