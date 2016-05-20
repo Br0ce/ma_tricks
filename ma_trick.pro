@@ -11,6 +11,7 @@ CONFIG += release
 
 INCLUDEPATH += ./hdr/
 INCLUDEPATH += /usr/include/eigen3
+INCLUDEPATH += /usr/local/include/eigen3
 
 DESTDIR=bin #Target file directory
 OBJECTS_DIR=gen_bin #Intermediate object files directory

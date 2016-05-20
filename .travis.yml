@@ -6,20 +6,55 @@ dist: trusty
 
 compiler:
   - gcc
+  - clang
 
 os:
   - linux
+  - osx
 
 env:
   - CONFIG=RELEASE
   - CONFIG=DEBUG
 
 before_install:
-  - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev
+
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+
+         sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y
+      && sudo apt-get update -qq;
+
+    else
+
+         brew update;
+
+    fi
+
+install:
+
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+
+         sudo apt-get install qt55base qt55declarative qt55tools -y
+      && sudo apt-get install -qq libeigen3-dev;
+
+    else
+
+         brew install qt5
+      && chmod -R 755 /usr/local/opt/qt5/*
+      && brew install eigen;
+
+    fi
 
 script:
-    - qmake -qt=qt5 -v
-    - qmake -qt=qt5
-    - make
+
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+
+          source /opt/qt55/bin/qt55-env.sh
+      && /opt/qt55/bin/qmake;
+
+    else
+
+     /usr/local/opt/qt5/bin/qmake;
+
+    fi
+
+  - make
