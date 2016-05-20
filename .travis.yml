@@ -14,15 +14,12 @@ env:
   - CONFIG=RELEASE
   - CONFIG=DEBUG
 
-
 before_install:
-  - sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty
+  - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
   - sudo apt-get update -qq
-
-install:
-  - sudo apt-get -y install qt55
+  - sudo apt-get install -qq qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev
 
 script:
-  - source /opt/qt55/bin/qt55-env.sh
-  - /opt/qt55/bin/qmake
-  - make
+    - qmake -qt=qt5 -v
+    - qmake -qt=qt5
+    - make
