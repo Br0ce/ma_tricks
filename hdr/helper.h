@@ -24,18 +24,22 @@
 #define HELPER_H
 
 #include <QDebug>
+#include <QtGlobal>
 
 #include <utility>
 
 #include <Eigen/Dense>
 
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 4, 0))
+#define QT_VERSION_5_4_REACHED
+#endif
 
 #define __LOG__FUNC \
-qDebug() << Q_FUNC_INFO;
+  qDebug() << Q_FUNC_INFO;
 
 #define __LOG(msg) \
-qDebug() << Q_FUNC_INFO << "in Line" << __LINE__ << ":" << msg;
+  qDebug() << Q_FUNC_INFO << "in Line" << __LINE__ << ":" << msg;
 
 
 enum class Operation { ADD, SUB, MUL, EQUAL, INV, TRANS };

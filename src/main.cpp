@@ -31,14 +31,16 @@
 #include "main_win.h"
 
 
+#ifdef QT_VERSION_5_4_REACHED // QtInfoMsg is defined QT_Version >= 5.4
+
 /**
- * @brief put debug-messages in file: /log/debug_log.txt
- *
- * @param type QtMsgType
- * @param con QMessageLogContext -- not used
- * @param msg QString
- * @return void
- */
+  * @brief redirect debug-messages to file: /log/debug_log.txt
+  *
+  * @param type QtMsgType
+  * @param con QMessageLogContext -- not used
+  * @param msg QString
+  * @return void
+  */
 void log_to_file(QtMsgType type, const QMessageLogContext& con, const
                  QString& msg)
 {
@@ -77,12 +79,18 @@ void log_to_file(QtMsgType type, const QMessageLogContext& con, const
   }
 }
 
+#endif
+
 
 int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
 
+
+#ifdef QT_VERSION_5_4_REACHED
   qInstallMessageHandler(log_to_file);
+#endif
+
 
   Main_win main_win;
 
