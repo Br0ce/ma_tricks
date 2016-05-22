@@ -70,7 +70,7 @@ void log_to_file(QtMsgType type, const QMessageLogContext& con, const
     abort();
   }
 
-  QFile f(QDir::currentPath() + "/log/debug_log.txt");
+  QFile f(QDir::currentPath() + "/log/debug_msg.log");
 
   if(f.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
   {
@@ -87,9 +87,9 @@ int main(int argc, char** argv)
   QApplication app(argc, argv);
 
 
-#ifdef QT_VERSION_5_4_REACHED
+  #ifdef QT_VERSION_5_4_REACHED
   qInstallMessageHandler(log_to_file);
-#endif
+  #endif
 
 
   Main_win main_win;
