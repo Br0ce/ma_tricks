@@ -1,0 +1,83 @@
+Checking gen_bin/moc_field.cpp...
+[hdr/field.h:26]: (information) Include file: <QLineEdit> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/field.h:27]: (information) Include file: <QDoubleValidator> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[gen_bin/moc_field.cpp:10]: (information) Include file: <QtCore/qbytearray.h> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[gen_bin/moc_field.cpp:11]: (information) Include file: <QtCore/qmetatype.h> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+1/10 files checked 6% done
+Checking gen_bin/moc_main_win.cpp...
+[hdr/main_win.h:26]: (information) Include file: <QMainWindow> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/main_win.h:27]: (information) Include file: <QSettings> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/main_win.h:28]: (information) Include file: <QFileDialog> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/main_win.h:29]: (information) Include file: <QFile> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/main_win.h:30]: (information) Include file: <QString> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/main_win.h:33]: (information) Include file: <vector> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/main_win.h:34]: (information) Include file: <fstream> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/main_win.h:35]: (information) Include file: <istream> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/main_win.h:36]: (information) Include file: <iostream> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/main_win.h:37]: (information) Include file: <memory> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/main_win.h:39]: (information) Include file: <Eigen/Dense> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/set_dim.h:26]: (information) Include file: <QMainWindow> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:12]: (information) Include file: <QtCore/QVariant> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:13]: (information) Include file: <QtWidgets/QAction> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:14]: (information) Include file: <QtWidgets/QApplication> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:15]: (information) Include file: <QtWidgets/QButtonGroup> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:16]: (information) Include file: <QtWidgets/QDialog> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:17]: (information) Include file: <QtWidgets/QDialogButtonBox> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:18]: (information) Include file: <QtWidgets/QGridLayout> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:19]: (information) Include file: <QtWidgets/QGroupBox> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:20]: (information) Include file: <QtWidgets/QHBoxLayout> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:21]: (information) Include file: <QtWidgets/QHeaderView> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:22]: (information) Include file: <QtWidgets/QLabel> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:23]: (information) Include file: <QtWidgets/QSpacerItem> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:24]: (information) Include file: <QtWidgets/QSpinBox> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_set_dim.h:25]: (information) Include file: <QtWidgets/QVBoxLayout> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/helper.h:26]: (information) Include file: <QDebug> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/helper.h:27]: (information) Include file: <QtGlobal> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/helper.h:29]: (information) Include file: <utility> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/helper.h:31]: (information) Include file: <Eigen/Dense> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/math_module.h:26]: (information) Include file: <stdexcept> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[hdr/math_module.h:28]: (information) Include file: <QObject> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:12]: (information) Include file: <QtCore/QVariant> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:13]: (information) Include file: <QtWidgets/QAction> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:14]: (information) Include file: <QtWidgets/QApplication> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:15]: (information) Include file: <QtWidgets/QButtonGroup> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:16]: (information) Include file: <QtWidgets/QGridLayout> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:17]: (information) Include file: <QtWidgets/QHBoxLayout> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:18]: (information) Include file: <QtWidgets/QHeaderView> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:19]: (information) Include file: <QtWidgets/QLineEdit> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:20]: (information) Include file: <QtWidgets/QMainWindow> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:21]: (information) Include file: <QtWidgets/QMenu> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:22]: (information) Include file: <QtWidgets/QMenuBar> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:23]: (information) Include file: <QtWidgets/QPushButton> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:24]: (information) Include file: <QtWidgets/QStatusBar> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:25]: (information) Include file: <QtWidgets/QVBoxLayout> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[ui_main_view.h:26]: (information) Include file: <QtWidgets/QWidget> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[gen_bin/moc_main_win.cpp:10]: (information) Include file: <QtCore/qbytearray.h> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[gen_bin/moc_main_win.cpp:11]: (information) Include file: <QtCore/qmetatype.h> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+2/10 files checked 22% done
+Checking gen_bin/moc_math_module.cpp...
+[gen_bin/moc_math_module.cpp:10]: (information) Include file: <QtCore/qbytearray.h> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[gen_bin/moc_math_module.cpp:11]: (information) Include file: <QtCore/qmetatype.h> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+3/10 files checked 32% done
+Checking gen_bin/moc_set_dim.cpp...
+[gen_bin/moc_set_dim.cpp:10]: (information) Include file: <QtCore/qbytearray.h> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[gen_bin/moc_set_dim.cpp:11]: (information) Include file: <QtCore/qmetatype.h> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+4/10 files checked 41% done
+Checking src/field.cpp...
+5/10 files checked 44% done
+Checking src/helper.cpp...
+6/10 files checked 44% done
+Checking src/main.cpp...
+[src/main.cpp:23]: (information) Include file: <memory> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[src/main.cpp:25]: (information) Include file: <QApplication> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[src/main.cpp:26]: (information) Include file: <QDebug> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[src/main.cpp:27]: (information) Include file: <QFile> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[src/main.cpp:28]: (information) Include file: <QTextStream> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+[src/main.cpp:29]: (information) Include file: <QDateTime> not found. Please note: Cppcheck does not need standard library headers to get proper results.
+7/10 files checked 50% done
+Checking src/main_win.cpp...
+8/10 files checked 82% done
+Checking src/set_dim.cpp...
+9/10 files checked 86% done
+Checking src/simple_math.cpp...
+10/10 files checked 100% done
