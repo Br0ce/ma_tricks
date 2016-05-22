@@ -1,4 +1,4 @@
-# Matricks
+# Matricks [![Build Status](https://travis-ci.org/Br0ce/ma_tricks.svg?branch=master)](https://travis-ci.org/Br0ce/ma_tricks)
 
 Matricks is an easy to use calculator for matrices.
 
