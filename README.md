@@ -29,5 +29,5 @@ It supports the following matrix and vector arithmetic.
 
 #### TODO
 
-* toggle view between decimal and fraction
-* make it look colorful
+* [] toggle view between decimal and fraction
+* [] make it look colorful
