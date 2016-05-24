@@ -3,8 +3,8 @@
 Matricks is an easy to use calculator for matrices.
 
 
-![](https://cloud.githubusercontent.com/assets/7359372/15506449/fc3a8fcc-21c7-
-11e6-8e53-b3a797eaf4aa.png)
+![matricks](https://cloud.githubusercontent.com/assets/7359372/15506449/fc3a8fcc
+-21c7-11e6-8e53-b3a797eaf4aa.png)
 
 
 ### Features
