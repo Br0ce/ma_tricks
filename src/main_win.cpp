@@ -118,20 +118,25 @@ void Main_win::closeEvent(QCloseEvent* event)
 }
 
 
-void Main_win::resize_main_win(const dim d)
+void Main_win::resize_main_win(const Dim d)
 {
   int h = h_size_;
   int w = w_size_;
 
-  // 37 == height of 1 row
-  if(d.first > 1)
-    h += (d.first - 1) * 37;
+  Field f(this);
 
-  // 17 == width of col no. 5, 56 == width of col no. > 5
-  if(d.second == 5)
-    w += 17;
-  else if(d.second > 5)
-    w += 17 + ((d.second - 5) * 56);
+  auto fh = f.sizeHint().rheight() + ui_->mat_layout->horizontalSpacing();
+
+  h += (d.first - 1) * fh;
+
+  auto fw = f.sizeHint().rwidth();
+  auto vs = ui_->mat_layout->verticalSpacing();
+  fw += vs;
+
+  auto width = (d.second * fw) + (2 * vs);
+
+  if(w < width)
+    w = width;
 
   this->setFixedSize(w, h);
 }
