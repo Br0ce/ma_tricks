@@ -8,8 +8,8 @@ TEMPLATE = app
 TARGET = ma_trick
 
 CONFIG += c++11
-CONFIG += release
-# CONFIG += debug
+#CONFIG += release
+CONFIG += debug
 
 INCLUDEPATH += ./hdr/
 INCLUDEPATH += /usr/include/eigen3
@@ -20,10 +20,10 @@ OBJECTS_DIR=gen_bin #Intermediate object files directory
 MOC_DIR=gen_bin #Intermediate moc files directory
 
 # Input
-HEADERS += hdr/main_win.h \
+HEADERS += hdr/helper.h \
+           hdr/main_win.h \
            hdr/field.h \
            hdr/set_dim.h \
-           hdr/helper.h \
            hdr/simple_math.h \
            hdr/math_module.h
 
