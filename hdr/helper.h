@@ -32,7 +32,7 @@
 
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 4, 0))
-  #define QT_VERSION_5_4_REACHED
+#define QT_VERSION_5_4_REACHED
 #endif
 
 #define __LOG__FUNC \
@@ -44,9 +44,9 @@
 
 enum class Operation { ADD, SUB, MUL, EQUAL, INV, TRANS };
 
-using dim = std::pair<int, int>;
-using matrix = Eigen::MatrixXd;
-using vector = Eigen::VectorXd;
+using Dim = std::pair<int, int>;
+using Matrix = Eigen::MatrixXd;
+using Vector = Eigen::VectorXd;
 
 
 #endif // HELPER_H

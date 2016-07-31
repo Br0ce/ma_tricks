@@ -29,7 +29,7 @@ Simple_math::Simple_math(QObject* parent) :
   status_(3, false) {}
 
 
-bool Simple_math::calc(const matrix& m, Operation o)
+bool Simple_math::calc(const Matrix& m, Operation o)
 {
 
   switch(o)
@@ -68,7 +68,7 @@ bool Simple_math::calc(const matrix& m, Operation o)
 }
 
 
-void Simple_math::add(const matrix& m)
+void Simple_math::add(const Matrix& m)
 {
   tmp_matrix_ = m;
 
@@ -99,7 +99,7 @@ void Simple_math::add(const matrix& m)
 }
 
 
-void Simple_math::sub(const matrix& m)
+void Simple_math::sub(const Matrix& m)
 {
   //TODO dont use same code as add
   tmp_matrix_ = m;
@@ -131,7 +131,7 @@ void Simple_math::sub(const matrix& m)
 }
 
 
-void Simple_math::mul(const matrix& m)
+void Simple_math::mul(const Matrix& m)
 {
   tmp_matrix_ = m;
 
@@ -154,7 +154,7 @@ void Simple_math::mul(const matrix& m)
 }
 
 
-void Simple_math::equal(const matrix& m)
+void Simple_math::equal(const Matrix& m)
 {
   tmp_matrix_ = m;
 
@@ -199,14 +199,14 @@ void Simple_math::clear()
   tmp_matrix_.setZero();
 }
 
-void Simple_math::inv(const matrix& m)
+void Simple_math::inv(const Matrix& m)
 {
   tmp_matrix_ = m.inverse();
 
   emit publish_result(tmp_matrix_);
 }
 
-void Simple_math::det(const matrix& m)
+void Simple_math::det(const Matrix& m)
 {
   tmp_matrix_.resize(1, 1);
   tmp_matrix_(0, 0) = m.determinant();
@@ -215,18 +215,18 @@ void Simple_math::det(const matrix& m)
 }
 
 
-void Simple_math::trans(const matrix& m)
+void Simple_math::trans(const Matrix& m)
 {
   tmp_matrix_ = m.transpose();
 
   emit publish_result(tmp_matrix_);
 }
 
-void Simple_math::dot(const matrix& x, const matrix& y)
+void Simple_math::dot(const Matrix& x, const Matrix& y)
 {
   if((x.cols() == 1) && y.cols() == 1)
   {
-    vector b = y;
+    Vector b = y;
 
     tmp_matrix_ = x.adjoint() * b;
   }
@@ -237,7 +237,7 @@ void Simple_math::dot(const matrix& x, const matrix& y)
 }
 
 
-void Simple_math::solve(const matrix& A, const matrix& b)
+void Simple_math::solve(const Matrix& A, const Matrix& b)
 {
   if(!(A.rows() == b.rows()))
     throw Math_error("dimensions do not match");
@@ -251,13 +251,13 @@ void Simple_math::solve(const matrix& A, const matrix& b)
 }
 
 
-bool Simple_math::dim_match_add(const matrix& m) const
+bool Simple_math::dim_match_add(const Matrix& m) const
 {
   return (sum_stack_.rows() == m.rows()) && (sum_stack_.cols() == m.cols());
 }
 
 
-bool Simple_math::dim_match_mul(const matrix& m) const
+bool Simple_math::dim_match_mul(const Matrix& m) const
 {
   return (mul_stack_.cols() == m.rows());
 }

@@ -50,7 +50,7 @@ public:
    * @param o Operation - Operation to perform
    * @return bool
    */
-  bool calc(const matrix& m, Operation o);
+  bool calc(const Matrix& m, Operation o);
 
 
 
@@ -61,17 +61,17 @@ public:
    ***************************************
    */
 
-  void add(const matrix& m) override;
-  void sub(const matrix& m) override;
-  void mul(const matrix& m) override;
-  void equal(const matrix& m) override;
+  void add(const Matrix& m) override;
+  void sub(const Matrix& m) override;
+  void mul(const Matrix& m) override;
+  void equal(const Matrix& m) override;
   void clear() override;
 
-  void trans(const matrix& m) override;
-  void inv(const matrix& m) override;
-  void dot(const matrix& x, const matrix& y) override;
-  void det(const matrix& m) override;
-  void solve(const matrix& A, const matrix& b) override;
+  void trans(const Matrix& m) override;
+  void inv(const Matrix& m) override;
+  void dot(const Matrix& x, const Matrix& y) override;
+  void det(const Matrix& m) override;
+  void solve(const Matrix& A, const Matrix& b) override;
 
 
 
@@ -90,7 +90,7 @@ public:
    * @param m const matrix&
    * @return bool
    */
-  bool dim_match_add(const matrix& m) const;
+  bool dim_match_add(const Matrix& m) const;
 
 
   /**
@@ -100,7 +100,7 @@ public:
    * @param m const matrix&
    * @return bool
    */
-  bool dim_match_mul(const matrix& m) const;
+  bool dim_match_mul(const Matrix& m) const;
 
 
   /**
@@ -155,10 +155,10 @@ public:
 
 private:
 
-  matrix sum_stack_;   // holds the actual sum
-  matrix mul_stack_;   // holds the actual factor
-  matrix tmp_matrix_;  // used to store tmp-results
-  matrix zero_matrix_;
+  Matrix sum_stack_;   // holds the actual sum
+  Matrix mul_stack_;   // holds the actual factor
+  Matrix tmp_matrix_;  // used to store tmp-results
+  Matrix zero_matrix_;
 
   std::vector<bool> status_; //at: 0=open_add, 1=open_sub, 2=open_mul
 

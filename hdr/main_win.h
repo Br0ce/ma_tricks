@@ -72,21 +72,21 @@ public:
   void read_settings();
   void save_settings();
 
-  void build_matrix(const dim d);
+  void build_matrix(const Dim d);
   void build_matrix(const int rows, const int cols);
   void remove_matrix();
-  void display_matrix(const matrix& m);
-  void display_matrix(const vector& v);//TODO delete
+  void display_matrix(const Matrix& m);
+  void display_matrix(const Vector& v);//TODO delete
   void display_matrix(const int rows, const int cols, const std::vector<double>&
                       v);
-  void read_matrix(matrix& m);
-  void read_matrix(vector& v);
+  void read_matrix(Matrix& m);
+  void read_matrix(Vector& v);
 
   void to_display(const QString s) const;
   QString next_display_char();
   void reset_display();
 
-  void resize_main_win(const dim d);
+  void resize_main_win(const Dim d);
 
 protected:
 
@@ -113,7 +113,7 @@ private slots:
 
   void save_clicked();
   void load_clicked();
-  void display_result(const matrix& m);
+  void display_result(const Matrix& m);
 
 private:
 
@@ -132,12 +132,12 @@ private:
 
   std::unique_ptr<Math_module> math_;
 
-  matrix A_;
-  matrix b_;
-  matrix x_;
+  Matrix A_;
+  Matrix b_;
+  Matrix x_;
 
-  dim mat_dim_;  // dimensions of the displayed matrix
-  dim mat_dim_tmp_;
+  Dim mat_dim_;  // dimensions of the displayed matrix
+  Dim mat_dim_tmp_;
 
   bool A_set_;
   bool b_set_;

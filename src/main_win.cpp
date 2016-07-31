@@ -86,8 +86,8 @@ void Main_win::init_gui()
   connect(ui_->pb_dot, SIGNAL(clicked(bool)), this, SLOT(dot_clicked()));
   connect(ui_->pb_det, SIGNAL(clicked(bool)), this, SLOT(det_clicked()));
 
-  connect(math_.get(), SIGNAL(publish_result(const matrix&)), this,
-          SLOT(display_result(const matrix&)));
+  connect(math_.get(), SIGNAL(publish_result(const Matrix&)), this,
+          SLOT(display_result(const Matrix&)));
 
   build_matrix(mat_dim_);
 }
@@ -147,7 +147,7 @@ void Main_win::resize_main_win(const dim d)
  */
 
 
-void Main_win::build_matrix(const dim d)
+void Main_win::build_matrix(const Dim d)
 {
   for(int i = 0; i < d.first; ++i)
     for(int j = 0; j < d.second; ++j)
@@ -177,7 +177,7 @@ void Main_win::remove_matrix()
 }
 
 
-void Main_win::display_matrix(const matrix& m)
+void Main_win::display_matrix(const Matrix& m)
 {
   for(int i = 0; i < m.rows(); ++i)
   {
@@ -209,7 +209,7 @@ void Main_win::display_matrix(const int rows, const int cols, const
 }
 
 
-void Main_win::display_matrix(const vector& v)
+void Main_win::display_matrix(const Vector& v)
 {
   for(int i = 0; i < v.rows(); ++i)
   {
@@ -221,7 +221,7 @@ void Main_win::display_matrix(const vector& v)
 }
 
 
-void Main_win::read_matrix(matrix& m)
+void Main_win::read_matrix(Matrix& m)
 {
   m.resize(mat_dim_.first, mat_dim_.second);
 
@@ -238,7 +238,7 @@ void Main_win::read_matrix(matrix& m)
 }
 
 
-void Main_win::read_matrix(vector& v)
+void Main_win::read_matrix(Vector& v)
 {
   v.resize(mat_dim_.first);
 
@@ -344,7 +344,7 @@ void Main_win::set_dim_clicked()
 
 void Main_win::mul_clicked()
 {
-  matrix m(mat_dim_.first, mat_dim_.second);
+  Matrix m(mat_dim_.first, mat_dim_.second);
   read_matrix(m);
 
   try
@@ -362,7 +362,7 @@ void Main_win::mul_clicked()
 
 void Main_win::add_clicked()
 {
-  matrix m(mat_dim_.first, mat_dim_.second);
+  Matrix m(mat_dim_.first, mat_dim_.second);
   read_matrix(m);
 
   try
@@ -380,7 +380,7 @@ void Main_win::add_clicked()
 
 void Main_win::sub_clicked()
 {
-  matrix m(mat_dim_.first, mat_dim_.second);
+  Matrix m(mat_dim_.first, mat_dim_.second);
   read_matrix(m);
 
   try
@@ -408,7 +408,7 @@ void Main_win::clear_clicked()
 
 void Main_win::trans_clicked()
 {
-  matrix m(mat_dim_.first, mat_dim_.second);
+  Matrix m(mat_dim_.first, mat_dim_.second);
   read_matrix(m);
 
   math_->trans(m);
@@ -421,7 +421,7 @@ void Main_win::trans_clicked()
 
 void Main_win::inv_clicked()
 {
-  matrix m(mat_dim_.first, mat_dim_.second);
+  Matrix m(mat_dim_.first, mat_dim_.second);
   read_matrix(m);
 
   math_->inv(m);
@@ -486,7 +486,7 @@ void Main_win::det_clicked()
 {
   try
   {
-    matrix m(mat_dim_.first, mat_dim_.second);
+    Matrix m(mat_dim_.first, mat_dim_.second);
     read_matrix(m);
 
     math_->det(m);
@@ -505,7 +505,7 @@ void Main_win::det_clicked()
 
 void Main_win::equal_clicked()
 {
-  matrix m(mat_dim_.first, mat_dim_.second);
+  Matrix m(mat_dim_.first, mat_dim_.second);
   read_matrix(m);
 
   try
@@ -613,7 +613,7 @@ void Main_win::load_clicked()
 }
 
 
-void Main_win::display_result(const matrix& m)
+void Main_win::display_result(const Matrix& m)
 {
   remove_matrix();
   build_matrix(m.rows(), m.cols());

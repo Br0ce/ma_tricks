@@ -69,7 +69,7 @@ public:
    * @param m const matrix&
    * @return void
    */
-  virtual void add(const matrix& m) = 0;
+  virtual void add(const Matrix& m) = 0;
 
 
   /**
@@ -82,7 +82,7 @@ public:
    * @param m const matrix&
    * @return void
    */
-  virtual void sub(const matrix& m) = 0;
+  virtual void sub(const Matrix& m) = 0;
 
 
   /**
@@ -95,7 +95,7 @@ public:
    * @param m const matrix&
    * @return void
    */
-  virtual void mul(const matrix& m) = 0;
+  virtual void mul(const Matrix& m) = 0;
 
 
   /**
@@ -108,7 +108,7 @@ public:
     * @param m const matrix&
     * @return void
     */
-  virtual void equal(const matrix& m) = 0;
+  virtual void equal(const Matrix& m) = 0;
 
 
   /**
@@ -118,7 +118,7 @@ public:
    * @param m const matrix&
    * @return void
    */
-  virtual void inv(const matrix& m) = 0;
+  virtual void inv(const Matrix& m) = 0;
 
 
   /**
@@ -131,7 +131,7 @@ public:
    * @param y const matrix& - has do be a vector!
    * @return void
    */
-  virtual void dot(const matrix& x, const matrix& y) = 0;
+  virtual void dot(const Matrix& x, const Matrix& y) = 0;
 
 
   /**
@@ -141,7 +141,7 @@ public:
    * @param m const matrix&
    * @return void
    */
-  virtual void det(const matrix& m) = 0;
+  virtual void det(const Matrix& m) = 0;
 
 
   /**
@@ -151,7 +151,7 @@ public:
    * @param m const matrix&
    * @return void
    */
-  virtual void trans(const matrix& m) = 0;
+  virtual void trans(const Matrix& m) = 0;
 
 
   /**
@@ -163,7 +163,7 @@ public:
    * @param b const matrix& - has to be a vector
    * @return void
    */
-  virtual void solve(const matrix& A, const matrix& b) = 0;
+  virtual void solve(const Matrix& A, const Matrix& b) = 0;
 
 
   /**
@@ -175,7 +175,7 @@ public:
 
 signals:
 
-  void publish_result(const matrix& m);
+  void publish_result(const Matrix& m);
 
 };
 
