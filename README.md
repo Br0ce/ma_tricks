@@ -3,6 +3,8 @@
 Matricks is an easy to use calculator for matrices.
 
 
+![matricks] (https://github.com/Br0ce/image_folder/blob/master/matricks.png)
+
 ### Features
 
 It supports the following matrix and vector arithmetic.
