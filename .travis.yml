@@ -46,15 +46,7 @@ install:
 
 script:
 
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+  - mkdir build
+  - cd build
+  - cmake .. && make;
 
-          source /opt/qt55/bin/qt55-env.sh
-      && /opt/qt55/bin/qmake;
-
-    else
-
-     /usr/local/opt/qt5/bin/qmake;
-
-    fi
-
-  - make
