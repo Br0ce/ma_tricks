@@ -20,7 +20,7 @@
  *
  */
 
-#include "set_dim.h"
+#include "../hdr/set_dim.h"
 
 
 Set_dim::Set_dim(QWidget* parent, std::pair<int, int>& p) :

@@ -28,7 +28,7 @@
 #include <QTextStream>
 #include <QDateTime>
 
-#include "main_win.h"
+#include "../hdr/main_win.h"
 
 
 #ifdef QT_VERSION_5_4_REACHED // QtInfoMsg is defined QT_Version >= 5.4

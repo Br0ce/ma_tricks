@@ -20,7 +20,7 @@
  *
  */
 
-#include "main_win.h"
+#include "../hdr/main_win.h"
 
 
 Main_win::Main_win(QWidget* parent) :

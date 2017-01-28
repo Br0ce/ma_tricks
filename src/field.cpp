@@ -20,7 +20,7 @@
  *
  */
 
-#include "field.h"
+#include "../hdr/field.h"
 
 
 Field::Field(QWidget* parent) :

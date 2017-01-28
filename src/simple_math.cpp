@@ -21,7 +21,7 @@
  *
  */
 
-#include "simple_math.h"
+#include "../hdr/simple_math.h"
 
 
 Simple_math::Simple_math(QObject* parent) :
