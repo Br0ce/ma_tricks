@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.11)
 
 project(ma_tricks)
 
+set(CMAKE_PREFIX_PATH "/usr/include/qt5/")
+
 # Find the QtWidgets library
 find_package(Qt5Widgets)
 
