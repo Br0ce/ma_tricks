@@ -36,7 +36,7 @@ bool Simple_math::calc(const Matrix& m, Operation o)
   {
   case Operation::ADD:
 
-    if(dim_match_add(m))
+    if (dim_match_add(m))
       sum_stack_ += m;
     else
       throw Math_error("dimensions do not match");
@@ -45,7 +45,7 @@ bool Simple_math::calc(const Matrix& m, Operation o)
 
   case Operation::SUB:
 
-    if(dim_match_add(m))
+    if (dim_match_add(m))
       sum_stack_ -= m;
     else throw Math_error("dimensions do not match");
     break;
@@ -53,15 +53,11 @@ bool Simple_math::calc(const Matrix& m, Operation o)
 
   case Operation::MUL:
 
-    if(dim_match_mul(m))
+    if (dim_match_mul(m))
       mul_stack_ *= m;
     else
       throw Math_error("dimensions do not match");
     break;
-
-
-  default:
-    return false;
   }
 
   return true;
@@ -153,6 +149,12 @@ void Simple_math::mul(const Matrix& m)
   set_open_mul(true);
 }
 
+void Simple_math::div(const Matrix &m)
+{
+  tmp_matrix_ = m.inverse();
+
+  mul(tmp_matrix_);
+}
 
 void Simple_math::equal(const Matrix& m)
 {

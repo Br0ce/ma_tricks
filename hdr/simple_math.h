@@ -64,6 +64,7 @@ public:
   void add(const Matrix& m) override;
   void sub(const Matrix& m) override;
   void mul(const Matrix& m) override;
+  void div(const Matrix& m) override;
   void equal(const Matrix& m) override;
   void clear() override;
 

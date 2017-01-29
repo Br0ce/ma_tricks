@@ -76,6 +76,7 @@ void Main_win::init_gui()
   connect(ui_->pb_plus, SIGNAL(clicked(bool)), this, SLOT(add_clicked()));
   connect(ui_->pb_sub, SIGNAL(clicked(bool)), this, SLOT(sub_clicked()));
   connect(ui_->pb_mul, SIGNAL(clicked(bool)), this, SLOT(mul_clicked()));
+  connect(ui_->pb_div, SIGNAL(clicked(bool)), this, SLOT(div_clicked()));
   connect(ui_->pb_clear, SIGNAL(clicked(bool)), this, SLOT(clear_clicked()));
   connect(ui_->pb_inv, SIGNAL(clicked(bool)), this, SLOT(inv_clicked()));
   connect(ui_->pb_set_A, SIGNAL(clicked(bool)), this, SLOT(set_A_clicked()));
@@ -364,6 +365,22 @@ void Main_win::mul_clicked()
   }
 }
 
+void Main_win::div_clicked()
+{
+  Matrix m(mat_dim_.first, mat_dim_.second);
+  read_matrix(m);
+
+  try
+  {
+    math_->div(m);
+
+    to_display(next_display_char() + " / ");
+  }
+  catch(std::exception& e)
+  {
+    to_display(e.what());
+  }
+}
 
 void Main_win::add_clicked()
 {

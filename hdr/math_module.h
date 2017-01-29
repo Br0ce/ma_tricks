@@ -99,6 +99,19 @@ public:
 
 
   /**
+   * @brief Publish what is closest of what is expected from
+   * a div-button ( A / B = A * B^{-1} ) in the context of
+   * a calculator using publish_result(const matrix&)
+   *
+   * throws Math_error()
+   *
+   * @param m const matrix&
+   * @return void
+   */
+  virtual void div(const Matrix& m) = 0;
+
+
+  /**
     * @brief Publish what is expected from a equal-button
     * in the context of a calculator using
     * publish_result(const matrix&)

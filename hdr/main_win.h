@@ -99,6 +99,7 @@ private slots:
   void set_x_clicked();
   void set_dim_clicked();
   void mul_clicked();
+  void div_clicked();
   void add_clicked();
   void sub_clicked();
   void clear_clicked();
