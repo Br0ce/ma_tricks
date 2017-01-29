@@ -26,7 +26,6 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
         src/field.cpp
-        src/helper.cpp
         src/main.cpp
         src/main_win.cpp
         src/set_dim.cpp
