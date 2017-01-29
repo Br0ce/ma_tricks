@@ -54,7 +54,8 @@ script:
 
          export LDFLAGS=-L/usr/local/opt/qt5/lib
       && export CPPFLAGS=-I/usr/local/opt/qt5/include
-      && export PKG_CONFIG_PATH=/usr/local/opt/qt5/lib/pkgconfig;
+      && export PKG_CONFIG_PATH=/usr/local/opt/qt5/lib/pkgconfig
+      && export CMAKE_PREFIX_PATH=/usr/local/Cellar/qt5/*/;
 
     fi
 
