@@ -39,7 +39,12 @@ QT5_WRAP_UI(UIS_HDRS
 
 include_directories(${Qt5Widgets_LIBRARIES})
 include_directories(${PROJECT_HEADER_FILES})
+
+# on Linux
 include_directories("/usr/include/eigen3/")
+# on osx
+include_directories("/usr/local/include/eigen3/")
+
 
 add_executable(ma_tricks ${SOURCE_FILES} ${HEADER_FILES} ${UIS_HDRS})
 
